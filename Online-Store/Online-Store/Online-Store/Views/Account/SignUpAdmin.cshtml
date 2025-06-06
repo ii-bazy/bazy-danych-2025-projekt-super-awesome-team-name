@@ -1,0 +1,34 @@
+﻿@model ViewUser
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Store - Sign Up (Admin)</title>
+    <link rel="stylesheet" href="/css/sign-in-admin.css">
+</head>
+<body>
+    <h1>Online Store - Sign Up (Admin)</h1>
+
+    <div class="sign-in-form">
+        @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+        {
+            <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+        }
+
+
+        <form asp-action="SignUpAdmin" asp-controller="Account" method="post">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="Username" value="@Model.Username" placeholder="Username" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="Password" placeholder="Password" required>
+
+            <input type="hidden" id="role" name="Role" value="Admin" />
+
+            <button type="submit">Sign Up</button>
+        </form>
+    </div>
+</body>
+</html>
+
