@@ -1,0 +1,58 @@
+﻿@model Dictionary<int, ViewOrderGroups>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Store - Orders</title>
+    <link rel="stylesheet" href="~/css/orders.css">
+</head>
+<body>
+    <div class="top-buttons">
+        <form asp-action="SignOut" asp-controller="Account" method="post">
+            <button type="submit">Sign Out</button>
+        </form>
+    </div>
+    <h1>Orders</h1>
+    <form method="post" action="@Url.Action("Index", "Admin")">
+        <button type="submit">Back to admin panel</button>
+    </form>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+    <h2>List of orders:</h2>
+    @if (!Model.Any())
+    {
+        <p>No orders available.</p>
+    }
+    else
+    {
+        <div id="orderList">
+            @foreach (var item in Model)
+            {
+                <div class="orderGroup">
+                    <h3>User: @item.Value.Username</h3>
+                    <h4>Date: @item.Value.DateOfPurchase.ToString()</h4>
+                    @foreach (var order in item.Value.Orders)
+                    {
+                        <div class="order">
+                            <h3>Order name: @order.ProductName</h3>
+                            <p>Price: @order.ProductPrice</p>
+                            <p>Units ordered: @order.Quantity</p>
+                        </div>
+                    }
+                    <form asp-action="DeleteOrder" asp-controller="Admin" method="post">
+                        <input type="hidden" name="orderId" value="@item.Key" />
+                        <button type="submit">Delete</button>
+                    </form>
+
+                </div>
+            }
+        </div>
+    }
+</body>
+</html>

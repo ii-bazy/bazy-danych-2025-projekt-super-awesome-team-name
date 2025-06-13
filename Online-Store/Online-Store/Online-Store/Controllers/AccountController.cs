@@ -19,10 +19,10 @@ namespace Online_Store.Controllers
         }
 
         [HttpPost]
-        public IActionResult SignIn(ViewUser model)
+        public IActionResult SignIn(ViewAccount model)
         {
             // TODO: Get real user
-            var user = new ViewUser(){ Username = model.Username, Password = model.Password};
+            var user = new ViewAccount(){ Username = model.Username, Password = model.Password};
 
             if (user != null)
             {
@@ -59,10 +59,10 @@ namespace Online_Store.Controllers
         }
 
         [HttpPost]
-        public IActionResult SignInAdmin(ViewUser model)
+        public IActionResult SignInAdmin(ViewAccount model)
         {
             // TODO: Get real admin
-            var admin = new ViewUser() { Username = model.Username, Password = model.Password };
+            var admin = new ViewAccount() { Username = model.Username, Password = model.Password };
 
             if (admin != null)
             {
@@ -108,7 +108,7 @@ namespace Online_Store.Controllers
         }
 
         [HttpPost]
-        public IActionResult SignUp(ViewUser model)
+        public IActionResult SignUp(ViewAccount model)
         {
             if (string.IsNullOrWhiteSpace(model.Username) || string.IsNullOrWhiteSpace(model.Password))
             {
@@ -125,7 +125,7 @@ namespace Online_Store.Controllers
                 return View(model);
             }
 
-            var user = new ViewUser
+            var user = new ViewAccount
             {
                 Username = model.Username,
                 Password = model.Password,
@@ -147,7 +147,7 @@ namespace Online_Store.Controllers
 
 
         [HttpPost]
-        public IActionResult SignUpAdmin(ViewUser model)
+        public IActionResult SignUpAdmin(ViewAccount model)
         {
             if (string.IsNullOrWhiteSpace(model.Username) || string.IsNullOrWhiteSpace(model.Password))
             {
@@ -164,8 +164,7 @@ namespace Online_Store.Controllers
                 return View(model);
             }
 
-            // Tworzymy nowego użytkownika z rolą Admin
-            var user = new ViewUser
+            var user = new ViewAccount
             {
                 Username = model.Username,
                 Password = model.Password

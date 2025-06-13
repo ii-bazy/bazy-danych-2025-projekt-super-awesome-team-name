@@ -15,21 +15,22 @@ Hanna Laszkiewicz & Bartosz Marchewka 🥕
         - [x] Add 
         - [ ] Use database
     * `User` Controller
-        - [ ] Add 
+        - [x] Add 
+        - [ ] Refactor `AddToCart`
         - [ ] Use database
     * `Cart` Controller
-        - [ ] Add 
+        - [x] Add 
+        - [ ] Refactor `GetCart`
         - [ ] Use database
     * `Payment` Controller
-        - [ ] Add 
+        - [x] Add 
         - [ ] Use database
     * `Admin` Controller
-        - [ ] Add 
+        - [x] Add 
         - [ ] Use database
     * Database 
         - [ ] Add dump
         - [ ] Add schema
-        - [ ] Update `User` table for anonymus users
         - [ ] Add `Cart` table
     * css file
         - [ ] Add

@@ -29,26 +29,5 @@ namespace Online_Store.Controllers
             return View("Index", result);
         }
 
-
-        [HttpPost]
-        public IActionResult AddToCart(string productName, double productPrice)
-        {
-            // For anonymus users we store cart in session
-            var cart = HttpContext.Session.GetObjectFromJson<List<ViewCartItem>>("cart") ?? new List<ViewCartItem>();
-
-            var existingItem = cart.FirstOrDefault(c => c.Name == productName);
-            if (existingItem == null)
-            {
-                cart.Add(new ViewCartItem { Name = productName, Price = productPrice, Quantity = 1 });
-            }
-            else
-            {
-                existingItem.Quantity++;
-            }
-
-            HttpContext.Session.SetObjectAsJson("cart", cart);
-            TempData["SuccessMessage"] = $"{productName} has been added to your cart!";
-            return RedirectToAction("Index");
-        }
     }
 }

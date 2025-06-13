@@ -1,0 +1,68 @@
+﻿@model Dictionary<int,ViewProduct>
+
+@{
+    ViewData["Title"] = "Admin Panel - Product Management";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel - Product Management</title>
+    <link rel="stylesheet" href="~/css/admin.css">
+</head>
+<body>
+    <div class="top-buttons">
+        <button onclick="window.location.href='@Url.Action("Users", "Admin")'">Users</button>
+        <button onclick="window.location.href='@Url.Action("Orders", "Admin")'">Orders</button>
+        <form asp-action="SignOut" asp-controller="Account" method="post">
+            <button type="submit">Sign Out</button>
+        </form>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    <h1>Add Product</h1>
+    <form asp-controller="Admin" asp-action="AddProduct" method="post">
+        <label for="productName">Product Name:</label>
+        <input type="text" id="productName" name="name" required />
+
+        <label for="productDescription">Product Description:</label>
+        <input type="text" id="productDescription" name="description" required />
+
+        <label for="productPrice">Product Price:</label>
+        <input type="number" id="productPrice" name="price" step="0.01" required />
+
+        <div>
+            <button type="submit">Add Product</button>
+        </div>
+    </form>
+
+    <h1>Products:</h1>
+    <div id="productList">
+        @foreach (var item in Model)
+        {
+            <div class="product">
+                <h3>@item.Value.Name</h3>
+                <p>@item.Value.Description</p>
+                <p>Price: $@item.Value.Price</p>
+                <form asp-controller="Admin" asp-action="Delete" method="post" style="display: inline;">
+                    <input type="hidden" name="productId" value="@item.Key" />
+                    <button type="submit" class="delete-button">Delete</button>
+                </form>
+                <button onclick="window.location.href='@Url.Action("Edit", "Admin", new { productId = item.Key })'">Edit</button>
+            </div>
+        }
+        @if (!Model.Any())
+        {
+            <p>No products available.</p>
+        }
+    </div>
+</body>
+</html>
