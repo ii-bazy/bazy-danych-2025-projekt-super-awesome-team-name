@@ -1,5 +1,5 @@
--- DROP DATABASE IF EXISTS bd_project;
--- GO
+DROP DATABASE IF EXISTS bd_project;
+GO
 
 CREATE DATABASE bd_project;
 GO
@@ -57,6 +57,5 @@ CREATE TABLE Notifications (
     user_id INT NOT NULL FOREIGN KEY REFERENCES Users(id) ON DELETE CASCADE,
     product_id INT NOT NULL FOREIGN KEY REFERENCES Products(id),
     should_send BIT NOT NULL,
-    is_read BIT NULL
+    is_read BIT NOT NULL
 );
-
