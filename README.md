@@ -29,8 +29,7 @@ Hanna Laszkiewicz & Bartosz Marchewka 🥕
         - [x] Add 
         - [ ] Use database
     * Database 
-        - [ ] Add dump
+        - [ ] Add test data
         - [ ] Add schema
-        - [ ] Add `Cart` table
-    * css file
+    * css files
         - [ ] Add
