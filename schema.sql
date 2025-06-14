@@ -22,7 +22,7 @@ CREATE TABLE Roles (
 -- Tabela Users
 CREATE TABLE Users (
     id INT IDENTITY(1,1) PRIMARY KEY,
-    username NVARCHAR(255) NOT NULL,
+    username NVARCHAR(255) UNIQUE NOT NULL,
     password_id INT FOREIGN KEY REFERENCES Passwords(id) ON DELETE CASCADE,
     role_id INT FOREIGN KEY REFERENCES Roles(id) ON DELETE SET NULL
 );
