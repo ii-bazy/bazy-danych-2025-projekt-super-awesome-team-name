@@ -40,7 +40,8 @@ CREATE TABLE Products (
 CREATE TABLE OrderGroups (
     id INT IDENTITY(1,1) PRIMARY KEY,
     user_id INT NOT NULL FOREIGN KEY REFERENCES Users(id) ON DELETE CASCADE,
-    order_date DATETIME NOT NULL DEFAULT GETDATE()
+    order_date DATETIME NOT NULL DEFAULT GETDATE(),
+    [status] NVARCHAR(20) NOT NULL;
 );
 
 -- Tabela OrderItems
