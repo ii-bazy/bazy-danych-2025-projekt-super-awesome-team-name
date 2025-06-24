@@ -1,18 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Online_Store.DB;
+using Online_Store.Data;
 using Online_Store.Extensions;
 using Online_Store.Models;
+using Online_Store.Services;
 
 namespace Online_Store.Controllers
 {
     public class AnonController : Controller
     {
-        private readonly List<ViewProduct> _products;
+        private readonly IEnumerable<ViewProduct> _products;
 
-        public AnonController()
+        public AnonController(IService service)
         {
-            // TODO: Use Data Layer to display Orders
-            _products = new List<ViewProduct>();
+            _products = service.GetProducts();
         }
 
         // Display all products for anon user

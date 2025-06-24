@@ -1,6 +1,6 @@
 ﻿namespace Online_Store.Models
 {
-    public class ViewOrderGroups
+    public class ViewOrderGroup
     {
         public string Username { get; set; }
         public DateOnly DateOfPurchase { get; set; }

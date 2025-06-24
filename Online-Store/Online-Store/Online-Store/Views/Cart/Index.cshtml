@@ -1,4 +1,4 @@
-﻿@model List<ViewCartItem>
+﻿@model Dictionary<int, ViewCartItem>
 
 @{
     ViewData["Title"] = "Your Cart";
@@ -29,12 +29,12 @@
             @foreach (var item in Model)
             {
                 <div class="cart-item">
-                    <h3>@item.Name</h3>
-                    <p>Price: $@item.Price</p>
-                    <p>Quantity: @item.Quantity</p>
+                    <h3>@item.Value.Name</h3>
+                    <p>Price: $@item.Value.Price</p>
+                    <p>Quantity: @item.Value.Quantity</p>
 
                     <form asp-controller="Cart" asp-action="RemoveFromCart" method="post">
-                        <input type="hidden" name="productName" value="@item.Name" />
+                        <input type="hidden" name="modelItem" value="@item" />
                         <button type="submit" class="button">Remove</button>
                     </form>
                 </div>
