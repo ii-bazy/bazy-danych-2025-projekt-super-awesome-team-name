@@ -1,0 +1,90 @@
+body {
+    background-color: #1a1f2d;
+    font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+    text-align: center;
+    color: #e0f7fa;
+    margin-top: 30vh;
+}
+
+h1 {
+    font-size: 40px;
+    margin-bottom: 10px;
+    color: #cceeff;
+}
+
+.top-buttons {
+    text-align: right;
+    margin-right: 20px;
+}
+
+.top-buttons button {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 0;
+    background-color: #1E88E5;
+    color: white;
+    font-family: inherit;
+    cursor: pointer;
+    margin-left: 10px;
+    width: auto;
+    border: none;
+}
+
+label {
+    font-size: 20px;
+    margin-top: 20px;
+    display: block;
+    text-align: left;
+    margin-left: 20px;
+    color: #e0f7fa;
+}
+
+input {
+    padding: 10px;
+    margin: 10px;
+    font-size: 16px;
+    border-radius: 0;
+    border: 1px solid #12324a;
+    background-color: #0f2b44;
+    color: #e0f7fa;
+    box-sizing: border-box;
+    width: 300px;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 16px;
+    border-radius: 0;
+    height: auto;
+    background-color: #43A047;
+    color: white;
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+}
+
+button:hover,
+.top-buttons button:hover {
+    background-color: #1565C0;
+}
+
+#results {
+    margin-top: 20px;
+    color: #e0f7fa;
+}
+
+.product {
+    background-color: #e0f7fa;
+    color: #0A1F33;
+    padding: 10px;
+    margin: 10px auto;
+    width: 320px;
+    border-radius: 0;
+    border: 1px solid #12324a;
+    box-shadow: none;
+}
+
+p {
+    margin-bottom: 5px;
+}

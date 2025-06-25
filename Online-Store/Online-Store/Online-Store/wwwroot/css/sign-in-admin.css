@@ -1,0 +1,77 @@
+body {
+    background-color: #1a1f2d;
+    font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+    text-align: center;
+    color: #e0f7fa;
+    margin-top: 30vh;
+}
+
+h1 {
+    font-size: 40px;
+    margin-bottom: 10px;
+    color: #cceeff;
+}
+
+label {
+    font-size: 20px;
+    margin-top: 20px;
+    color: #e0f7fa;
+    display: block;
+}
+
+input {
+    padding: 10px;
+    margin: 10px;
+    font-size: 16px;
+    border-radius: 0;
+    border: 1px solid #334155;
+    background-color: #0f2b44;
+    color: #e0f7fa;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 16px;
+    border-radius: 0;
+    height: auto;
+    line-height: normal;
+    vertical-align: middle;
+    background-color: #1565C0;
+    color: white;
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+}
+
+button:hover {
+    background-color: #0d47a1;
+}
+
+#results {
+    margin-top: 20px;
+}
+
+.product {
+    background-color: #263238;
+    color: #e0f7fa;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    border: 1px solid #37474f;
+}
+
+.sign-in-form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+p {
+    margin-bottom: 5px;
+}
