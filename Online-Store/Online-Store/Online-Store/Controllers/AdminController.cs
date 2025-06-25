@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Online_Store.DB;
+using Online_Store.Data.Models;
 using Online_Store.Models;
+using Online_Store.Services;
 using System.Globalization;
 
 namespace Online_Store.Controllers
@@ -11,13 +12,14 @@ namespace Online_Store.Controllers
     {
         private readonly Dictionary<int,ViewProduct> _products;
         private readonly Dictionary<int, ViewUser> _users;
-        private readonly Dictionary<int, ViewOrderGroups> _orderGroups;
-        public AdminController() 
+        private readonly Dictionary<int, ViewOrderGroup> _orderGroups;
+        private readonly IService _service;
+        public AdminController(IService service) 
         {
-            // TODO: Use Data Layer to get products, users and orders
-            _products = new Dictionary<int, ViewProduct>();
-            _users = new Dictionary<int, ViewUser>();
-            _orderGroups = new Dictionary<int, ViewOrderGroups>();
+            _service = service;
+            _products = _service.GetIdViewProducts();
+            _users = _service.GetIdViewUsers();
+            _orderGroups = _service.GetIdOrderGroups();
         }
 
         public IActionResult Index()
@@ -47,11 +49,9 @@ namespace Online_Store.Controllers
                 Price = Math.Round(parsedPrice, 2)
             };
 
-            // TODO: Use Data Layer to add new Product and get real id
+            // TODO: Get real quantity
 
-            Random random = new Random();
-            int id = random.Next(1, 1000);
-            _products[id] = newProduct;
+            _service.AddProduct(name, description, (float)Math.Round(parsedPrice, 2), 0);
 
             TempData["SuccessMessage"] = $"{name} has been added!";
             return RedirectToAction("Index");
@@ -75,9 +75,12 @@ namespace Online_Store.Controllers
         {
             if (ModelState.IsValid)
             {
-                // TODO: Use id and ViewProduct to update Products table
-
-                _products[model.Key] = model.Value;
+                _service.UpdateProduct(
+                    model.Key, 
+                    model.Value.Name, 
+                    model.Value.Description, 
+                    (float) Math.Round(model.Value.Price, 2), 
+                    model.Value.Quantity);
 
                 TempData["SuccessMessage"] = "Product updated successfully!";
                 return RedirectToAction("Index");
@@ -90,18 +93,10 @@ namespace Online_Store.Controllers
         [HttpPost]
         public IActionResult Delete(int productId)
         {
+            _service.DeleteProduct(productId);
 
-            // TODO: Delete from database
-            var success = true;
-            if (success)
-            {
-                _products.Remove(productId);
-                TempData["SuccessMessage"] = "Product deleted successfully!";
-            }
-            else
-            {
-                TempData["ErrorMessage"] = "Error deleting product.";
-            }
+            TempData["SuccessMessage"] = "Product deleted successfully!";
+            
             return RedirectToAction("Index");
         }
 
@@ -113,20 +108,13 @@ namespace Online_Store.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteUserAsync(int userId)
+        public IActionResult DeleteUserAsync(int userId)
         {
 
-            // TODO: Delete from database
-            var success = true;
-            if (success)
-            {
-                _users.Remove(userId);
-                TempData["SuccessMessage"] = "User deleted successfully!";
-            }
-            else
-            {
-                TempData["ErrorMessage"] = "Error deleting user.";
-            }
+            _service.DeleteUser(userId);
+
+            TempData["SuccessMessage"] = "User deleted successfully!";
+
             return RedirectToAction("Users");
         }
 
@@ -137,20 +125,12 @@ namespace Online_Store.Controllers
         }
 
         [HttpPost]
-        public IActionResult DeleteOrder(int orderId)
+        public IActionResult DeleteOrder(int orderGroupId)
         {
+            _service.DeleteOrderGroup(orderGroupId);
 
-            // TODO: Delete from database
-            var success = true;
-            if (success)
-            {
-                _orderGroups.Remove(orderId);
-                TempData["SuccessMessage"] = "Order deleted successfully!";
-            }
-            else
-            {
-                TempData["ErrorMessage"] = "Error deleting order.";
-            }
+            TempData["ErrorMessage"] = "Error deleting order.";
+            
             return RedirectToAction("Orders");
         }
     }

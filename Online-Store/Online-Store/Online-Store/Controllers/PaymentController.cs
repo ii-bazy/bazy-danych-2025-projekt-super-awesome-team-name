@@ -1,21 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Online_Store.DB;
+using Online_Store.Data.Models;
 using Online_Store.Extensions;
 using Online_Store.Models;
+using Online_Store.Services;
 
 namespace Online_Store.Controllers
 {
     public class PaymentController : Controller
     {
-        private List<ViewCartItem> GetCart()
+        private readonly IService _service;
+        private Dictionary<int, ViewCartItem> GetCart()
         {
-            var cart = HttpContext.Session.GetObjectFromJson<List<ViewCartItem>>("cart");
-            return cart ?? new List<ViewCartItem>();
+            return _service.GetCartItems(User.Identity?.Name);
         }
 
-        private void ClearCart()
+        public PaymentController(IService service)
         {
-            HttpContext.Session.SetObjectAsJson("cart", new List<ViewCartItem>());
+            _service = service;
         }
 
         [HttpGet]
@@ -36,14 +37,24 @@ namespace Online_Store.Controllers
                 return RedirectToAction("Index");
             }
 
-            // TODO: Place Order in database
+            using (var transaction = _service.BeginTransaction())
+            {
+                try
+                {
+                    TempData["SuccessMessage"] = _service.BuyCart(User.Identity?.Name);
 
-            ClearCart();
-
-            TempData["SuccessMessage"] = "Order placed successfully! Your cart is now empty.";
-            return RedirectToAction("OrderPlaced");
+                    transaction.Commit();
+                    
+                    return RedirectToAction("OrderPlaced");
+                }
+                catch
+                {
+                    transaction.Rollback();
+                    TempData["ErrorMessage"] = "Something went wrong while placing the order.";
+                    return RedirectToAction("Index");
+                }
+            }
         }
-
 
 
         [HttpGet]

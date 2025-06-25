@@ -10,24 +10,30 @@ Hanna Laszkiewicz & Bartosz Marchewka 🥕
 1. **Online-Store**
     * `Anon` Controller
         - [x] Add 
-        - [ ] Use database
+        - [x] Use database
+        - [ ] Add Quantity to View
     * `Account` Controller
         - [x] Add 
-        - [ ] Use database
+        - [x] Use database
+        - [ ] Add password hashing
     * `User` Controller
         - [x] Add 
-        - [ ] Refactor `AddToCart`
-        - [ ] Use database
+        - [x] Refactor `AddToCart`
+        - [x] Use database
+        - [ ] Add notification view
+        - [ ] Add Quantity to view
     * `Cart` Controller
         - [x] Add 
-        - [ ] Refactor `GetCart`
-        - [ ] Use database
+        - [x] Refactor `GetCart`
+        - [x] Use database
     * `Payment` Controller
         - [x] Add 
         - [ ] Use database
     * `Admin` Controller
         - [x] Add 
-        - [ ] Use database
+        - [x] Use database
+        - [ ] Add notification view
+        - [ ] Add Quantity to view
     * Database 
         - [ ] Add test data
         - [ ] Add schema

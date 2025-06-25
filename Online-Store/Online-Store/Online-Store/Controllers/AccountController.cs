@@ -2,27 +2,31 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Online_Store.DB;
 using Online_Store.Models;
 using System.Security.Claims;
+using Online_Store.Services;
 
 namespace Online_Store.Controllers
 {
     public class AccountController : Controller
     {
-        public AccountController() { }
+        private readonly IService _service;
+        public AccountController(IService service) 
+        {
+            _service = service;
+        }
 
         [HttpGet]
         public IActionResult SignIn()
         {
-            return View(new ViewUser());
+            return View(new ViewAccount());
         }
 
         [HttpPost]
         public IActionResult SignIn(ViewAccount model)
         {
-            // TODO: Get real user
-            var user = new ViewAccount(){ Username = model.Username, Password = model.Password};
+            // TODO: Hash
+            var user = _service.GetByUsernameAndPassword(model.Username, model.Password);
 
             if (user != null)
             {
@@ -35,7 +39,7 @@ namespace Online_Store.Controllers
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var authProperties = new AuthenticationProperties
                 {
-                    IsPersistent = false // Saves iven after clowsing brawser
+                    IsPersistent = false // Saves even after clowsing brawser
                 };
 
                 HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
@@ -55,14 +59,13 @@ namespace Online_Store.Controllers
         [HttpGet]
         public IActionResult SignInAdmin()
         {
-            return View(new ViewUser());
+            return View(new ViewAccount());
         }
 
         [HttpPost]
         public IActionResult SignInAdmin(ViewAccount model)
         {
-            // TODO: Get real admin
-            var admin = new ViewAccount() { Username = model.Username, Password = model.Password };
+            var admin = _service.GetByUsernameAndPassword(model.Username, model.Password);
 
             if (admin != null)
             {
@@ -104,7 +107,7 @@ namespace Online_Store.Controllers
         [HttpGet]
         public IActionResult SignUp()
         {
-            return View(new ViewUser());
+            return View(new ViewAccount());
         }
 
         [HttpPost]
@@ -116,22 +119,15 @@ namespace Online_Store.Controllers
                 return View(model);
             }
 
-            // TODO: Check if given username is taken
-            bool userExists = false;
+            bool userExists = _service.IsUsernameUsed(model.Username);
 
             if (userExists)
             {
                 ViewBag.ErrorMessage = "This username is already taken.";
-                return View(model);
+                return View(model); 
             }
 
-            var user = new ViewAccount
-            {
-                Username = model.Username,
-                Password = model.Password,
-            };
-
-            // TODO: Add new user to database
+            _service.AddUser(model.Username, model.Password, "Customer");
 
             TempData["SuccessMessage"] = "Your account has been created. You can now log in!";
             return RedirectToAction("SignIn");
@@ -141,10 +137,8 @@ namespace Online_Store.Controllers
         public IActionResult SignUpAdmin()
         {
             ViewBag.ErrorMessage = null;
-            return View(new ViewUser());
+            return View(new ViewAccount());
         }
-
-
 
         [HttpPost]
         public IActionResult SignUpAdmin(ViewAccount model)
@@ -155,8 +149,7 @@ namespace Online_Store.Controllers
                 return View(model);
             }
 
-            // TODO: Check if given username is taken
-            bool userExists = false;
+            bool userExists = _service.IsUsernameUsed(model.Username);
 
             if (userExists)
             {
@@ -164,13 +157,7 @@ namespace Online_Store.Controllers
                 return View(model);
             }
 
-            var user = new ViewAccount
-            {
-                Username = model.Username,
-                Password = model.Password
-            };
-
-            // TODO: Add new admin to database
+            _service.AddUser(model.Username, model.Password, "Admin");
 
             TempData["SuccessMessage"] = "Admin account has been created. You can now log in!";
             return RedirectToAction("SignInAdmin");  
