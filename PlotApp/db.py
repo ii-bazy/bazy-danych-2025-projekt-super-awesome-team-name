@@ -5,6 +5,7 @@ SERVER = 'localhost\\SQLEXPRESS'  # lub nazwa instancji
 DATABASE = 'bd_project'
 DRIVER = 'ODBC Driver 17 for SQL Server'
 
+
 def get_connection():
     try:
         conn = pyodbc.connect(
@@ -15,30 +16,6 @@ def get_connection():
         print("Błąd połączenia z bazą danych:", e)
         return None
 
-def get_sales_data(): # przykładowe dane do wykresu
-    conn = get_connection()
-    if not conn:
-        return []
-
-    query = """
-        SELECT p.name, SUM(oi.quantity) AS total_sold
-        FROM OrderItems oi
-        JOIN Products p ON oi.product_id = p.id
-        GROUP BY p.name
-        ORDER BY total_sold DESC;
-    """
-
-    try:
-        cursor = conn.cursor()
-        cursor.execute(query)
-        results = cursor.fetchall()
-        return [(row[0], row[1]) for row in results]
-    except Exception as e:
-        print("Błąd podczas pobierania danych:", e)
-        return []
-    finally:
-        conn.close()
-
 
 def get_dynamic_data(x_choice, y_choice, date_from=None, date_to=None):
     conn = get_connection()
@@ -48,7 +25,7 @@ def get_dynamic_data(x_choice, y_choice, date_from=None, date_to=None):
     where_clauses = []
     params = []
 
-    # Dodaj warunki filtrowania statusu
+    # Warunki filtrowania statusu zamówienia (pomijamy koszyki i anulowane)
     where_clauses.append("og.status NOT IN (?, ?)")
     params.extend(['cart', 'cancelled'])
 
@@ -79,6 +56,10 @@ def get_dynamic_data(x_choice, y_choice, date_from=None, date_to=None):
         x = x_map.get(x_choice)
 
         # Obsługa średnich dla dowolnego x_choice
+
+        # Czemu nie AVG?
+        # AVG(oi.quantity) dałoby średnią ilość pojedynczej pozycji zamówienia.
+        # AVG(oi.quantity * p.price) dałoby średnią wartość pojedynczej pozycji zamówienia.
         if y_choice == "Średnia liczba sztuk w zamówieniu":
             query = f"""
                 SELECT {x} AS label,

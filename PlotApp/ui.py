@@ -2,15 +2,13 @@ import tkinter as tk
 from tkinter import ttk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
-from plotter import Plotter # Upewnij się, że plotter.py jest dostępny
+from plotter import Plotter
 
 
 class SalesDashboard:
     def __init__(self):
         self.root = tk.Tk()
         self.root.title("Sales Dashboard")
-        # Ustaw początkowy rozmiar okna. Wykres będzie renderowany w tym obszarze.
-        # Proponuję większy rozmiar, aby wykres był faktycznie duży.
         self.root.geometry("1000x700")
 
         self.plotter = Plotter()
@@ -20,8 +18,7 @@ class SalesDashboard:
     def create_widgets(self):
         # Górny pasek z przyciskami i wyborami
         top_frame = ttk.Frame(self.root)
-        # top_frame będzie miał mały margines od góry, ale nie od boków
-        top_frame.pack(side=tk.TOP, fill=tk.X, padx=0, pady=(10, 5)) # padx=0 dla braku marginesów bocznych
+        top_frame.pack(side=tk.TOP, fill=tk.X, padx=0, pady=(10, 5))
 
         # Typ wykresu
         self.plot_type = ttk.Combobox(top_frame, values=["Słupkowy", "Liniowy"], width=10)
@@ -69,30 +66,21 @@ class SalesDashboard:
         self.date_to = ttk.Entry(top_frame, width=12)
         self.date_to.pack(side=tk.LEFT, padx=2)
 
-        # Przycisk generowania wykresu
         plot_button = ttk.Button(top_frame, text="Generuj wykres", command=self.update_plot)
         plot_button.pack(side=tk.LEFT, padx=5)
 
         self.widgets_to_toggle = [self.plot_type, self.x_axis]
 
-        # Miejsce na wykres
-        # Figura będzie miała preferowany rozmiar, ale Matplotlib będzie próbował dopasować
-        # rendering do rozmiaru canvas.
-        # Możesz ustawić duży figsize, aby Matplotlib miał dużo "miejsca" do rysowania.
-        # np. 800x500 pikseli (8x5 cali przy 100dpi)
         self.figure = Figure(figsize=(8, 5), dpi=100)
         self.ax = self.figure.add_subplot(111)
         self.canvas = FigureCanvasTkAgg(self.figure, master=self.root)
 
-        # Pakowanie canvas:
-        # - fill=tk.BOTH, expand=True: Sprawiają, że canvas zajmuje całą pozostałą przestrzeń.
-        # - padx=0, pady=(0,0): Brak marginesów wokół samego canvas.
-        #   Margines od góry (paska) będzie wynikał z pady na top_frame.
+
         self.canvas.get_tk_widget().pack(
-            fill=tk.BOTH,      # Wypełnij dostępną przestrzeń w obu kierunkach
-            expand=True,       # Rozciągnij, aby zająć całą dodatkową przestrzeń
-            padx=0,            # Brak marginesów bocznych
-            pady=0             # Brak marginesów pionowych (poza tymi z top_frame)
+            fill=tk.BOTH,
+            expand=True,
+            padx=0,
+            pady=0
         )
 
     def update_plot(self):
