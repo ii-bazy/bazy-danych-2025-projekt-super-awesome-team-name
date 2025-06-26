@@ -27,11 +27,11 @@ namespace Online_Store.Controllers
 
         // Remove from cart
         [HttpPost]
-        public IActionResult RemoveFromCart(KeyValuePair<int, ViewCartItem> itemModel)
+        public IActionResult RemoveFromCart(int key, string name)
         {
-            _service.DeleteOrderItem(itemModel.Key);
+            _service.DeleteOrderItem(key);
             
-            TempData["SuccessMessage"] = $"{itemModel.Value.Name} has been removed from your cart!";
+            TempData["SuccessMessage"] = $"{name} has been removed from your cart!";
             
             return RedirectToAction("Index");
         }

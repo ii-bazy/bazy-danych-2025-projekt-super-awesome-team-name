@@ -34,7 +34,8 @@
                     <p>Quantity: @item.Value.Quantity</p>
 
                     <form asp-controller="Cart" asp-action="RemoveFromCart" method="post">
-                        <input type="hidden" name="modelItem" value="@item" />
+                        <input type="hidden" name="key" value="@item.Key" />
+                        <input type="hidden" name="name" value="@item.Value.Name" />
                         <button type="submit" class="button">Remove</button>
                     </form>
                 </div>

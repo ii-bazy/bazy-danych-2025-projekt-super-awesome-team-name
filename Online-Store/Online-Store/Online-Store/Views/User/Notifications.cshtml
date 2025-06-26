@@ -1,0 +1,61 @@
+﻿@model Dictionary<int, ViewNotification>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Store - Notifications</title>
+    <link rel="stylesheet" href="~/css/notifications.css">
+</head>
+<body>
+    <h1>Notifications</h1>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <p class="error">@TempData["ErrorMessage"]</p>
+    }
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <p class="success">@TempData["SuccessMessage"]</p>
+    }
+
+    <p>Here are your notifications</p>
+
+    @if (Model != null && Model.Any())
+    {
+        <ul id="notifications">
+            @foreach (var item in Model)
+            {
+                @if (item.Value.IsRead)
+                {
+                    <li class="notification__item">
+                        <p>Item @item.Value.ItemName is back in stock! Don't miss it!</p>
+                        <form method="post" asp-action="UpdateNotification" asp-controller="User">
+                            <input type="hidden" name="notificationId" value="@item.Key" />
+                            <button type="submit">Unread</button>
+                        </form>
+                    </li>
+                }
+                else
+                {
+                    <li class="notification__item --unread">
+                        <p>Item @item.Value.ItemName is back in stock! Don't miss it!</p>
+                        <form method="post" asp-action="UpdateNotification" asp-controller="User">
+                            <input type="hidden" name="notificationId" value="@item.Key" />
+                            <button type="submit">Read</button>
+                        </form>
+                    </li>
+                }
+            }
+        </ul>
+    }
+    else
+    {
+        <p>You have 0 notifications. <a asp-controller="User" asp-action="Index">Go back to the store</a>.</p>
+    }
+
+    
+</body>
+</html>

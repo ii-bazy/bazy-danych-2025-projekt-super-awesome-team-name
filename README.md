@@ -11,7 +11,7 @@ Hanna Laszkiewicz & Bartosz Marchewka 🥕
     * `Anon` Controller
         - [x] Add 
         - [x] Use database
-        - [ ] Add Quantity to View
+        - [x] Add Quantity to View
     * `Account` Controller
         - [x] Add 
         - [x] Use database
@@ -20,22 +20,25 @@ Hanna Laszkiewicz & Bartosz Marchewka 🥕
         - [x] Add 
         - [x] Refactor `AddToCart`
         - [x] Use database
-        - [ ] Add notification view
-        - [ ] Add Quantity to view
+        - [x] Add notification view
+        - [x] Add Quantity to view
     * `Cart` Controller
         - [x] Add 
         - [x] Refactor `GetCart`
         - [x] Use database
     * `Payment` Controller
         - [x] Add 
-        - [ ] Use database
+        - [x] Use database 
+        - [x] Add notification subscribtion
     * `Admin` Controller
         - [x] Add 
         - [x] Use database
-        - [ ] Add notification view
-        - [ ] Add Quantity to view
+        - [x] Add Quantity to view
     * Database 
         - [ ] Add test data
         - [ ] Add schema
     * css files
-        - [ ] Add
+        - [x] Add
+        - [ ] Center alert in `Account`
+        - [ ] Center labels in `Admin`
+        - [ ] `Admin`'s `Orders` view 

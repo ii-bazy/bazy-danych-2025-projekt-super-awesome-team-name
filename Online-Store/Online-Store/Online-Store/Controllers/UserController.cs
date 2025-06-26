@@ -9,6 +9,7 @@ namespace Online_Store.Controllers
     {
         private readonly IService _service;
         private readonly Dictionary<int, ViewProduct> _products;
+        private Dictionary<int, ViewNotification> _notifications;
 
         public UserController(IService service)
         {
@@ -19,14 +20,32 @@ namespace Online_Store.Controllers
         // Display all products for user
         public IActionResult Index()
         {
-            return View(_products);
+            _notifications = _service.GetIdSendNotifications(User.Identity?.Name);
+            bool flag = _notifications.Any(n => !n.Value.IsRead);
+
+            var model = new ViewProductsWithNotificationFlag()
+            {
+                Pairs = _products,
+                HasUnreadNotification = flag
+            };
+
+            return View(model);
         }
 
         // Display only wanted products
         public IActionResult Search(string query)
         {
+            _notifications = _service.GetIdSendNotifications(User.Identity?.Name);
             var result = _products.Where(p => p.Value.Name.Contains(query) || p.Value.Description.Contains(query)).ToList();
-            return View("Index", result);
+            bool flag = _notifications.Any(n => !n.Value.IsRead);
+
+            var model = new ViewProductsWithNotificationFlag()
+            {
+                Pairs = result,
+                HasUnreadNotification = flag
+            };
+
+            return View("Index", model);
         }
 
         [HttpPost]
@@ -36,6 +55,22 @@ namespace Online_Store.Controllers
 
             TempData["SuccessMessage"] = $"{_products[productId].Name} has been added to your cart!";
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult Notifications()
+        {
+            _notifications = _service.GetIdSendNotifications(User.Identity?.Name);
+            return View("Notifications", _notifications);
+        }
+
+        [HttpPost]
+        public IActionResult UpdateNotification(int notificationId)
+        {
+            _service.ChangeNotificationIsRead(notificationId);
+
+            TempData["SuccessMessage"] = $"Notification's status is changed";
+            return RedirectToAction("Notifications");
         }
     }
 }

@@ -11,6 +11,11 @@ h1 {
   margin-bottom: 10px;
 }
 
+.controls {
+    display: flex;
+    justify-content: center;
+}
+
 label {
   font-size: 20px;
   margin-top: 20px;

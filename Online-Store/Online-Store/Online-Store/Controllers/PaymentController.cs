@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Online_Store.Data.Models;
 using Online_Store.Extensions;
 using Online_Store.Models;
 using Online_Store.Services;
+using System.Collections.Generic;
+using System.Numerics;
 
 namespace Online_Store.Controllers
 {
@@ -41,7 +44,11 @@ namespace Online_Store.Controllers
             {
                 try
                 {
-                    TempData["SuccessMessage"] = _service.BuyCart(User.Identity?.Name);
+                    var result = _service.BuyCart(User.Identity?.Name);
+                    if (result.Succes)
+                        TempData["PaymentResult"] = "Your order has been placed successfully. The admin can now view your order via the order list.";
+                    else
+                        TempData["PaymentResult"] = $"At least one of items in your cart ({result.ItemName}) isn't avaible now. You will receive a notification as it appears. For now in order to buy a cart, remove that product.";
 
                     transaction.Commit();
                     

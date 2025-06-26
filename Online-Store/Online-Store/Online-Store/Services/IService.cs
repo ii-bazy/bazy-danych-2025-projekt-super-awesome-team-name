@@ -4,13 +4,19 @@ using Online_Store.Models;
 
 namespace Online_Store.Services
 {
+    public interface IBuyResult
+    {
+        public bool Succes { get; }
+        public string? ItemName { get; }
+    }
     public interface IService
     {
         public IEnumerable<ViewProduct> GetProducts();
         
         public bool IsUsernameUsed(string username);
-        public string BuyCart(string username);
+        public IBuyResult BuyCart(string username);
         public void AddToCart(string username, int productId);
+        public void ChangeNotificationIsRead(int id);
         public User? GetByUsernameAndPassword(string username, string hashedPassword);
 
         public void AddUser(string username, string hashedPassword, string roleName);
@@ -25,8 +31,10 @@ namespace Online_Store.Services
 
         public Dictionary<int, ViewProduct> GetIdViewProducts();
         public Dictionary<int, ViewUser> GetIdViewUsers();
-        public Dictionary<int, ViewOrderGroup> GetIdOrderGroups();
+        public Dictionary<int, ViewOrderGroup> GetIdPayedOrderGroups();
         public Dictionary<int, ViewCartItem> GetCartItems(string username);
+
+        public Dictionary<int, ViewNotification> GetIdSendNotifications(string username);
 
         public IDbContextTransaction BeginTransaction();
     }

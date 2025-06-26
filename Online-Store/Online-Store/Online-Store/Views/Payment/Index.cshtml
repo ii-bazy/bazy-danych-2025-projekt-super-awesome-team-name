@@ -1,4 +1,4 @@
-﻿@model List<ViewCartItem>
+﻿@model Dictionary<int, ViewCartItem>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -18,7 +18,7 @@
         <ul>
             @foreach (var item in Model)
             {
-                <li>@item.Quantity × @item.Name - $@(item.Price * item.Quantity)</li>
+                <li>@item.Value.Quantity × @item.Value.Name - $@(item.Value.Price * item.Value.Quantity)</li>
             }
         </ul>
         <form asp-action="PlaceOrder" method="post">

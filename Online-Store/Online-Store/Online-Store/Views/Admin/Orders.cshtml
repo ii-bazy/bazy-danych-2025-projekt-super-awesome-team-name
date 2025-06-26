@@ -46,7 +46,7 @@
                         </div>
                     }
                     <form asp-action="DeleteOrder" asp-controller="Admin" method="post">
-                        <input type="hidden" name="orderId" value="@item.Key" />
+                        <input type="hidden" name="orderGroupId" value="@item.Key" />
                         <button type="submit">Delete</button>
                     </form>
 

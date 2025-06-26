@@ -8,6 +8,7 @@ namespace Online_Store.Data.Repositories
         OrderItem GetById(int id);
         IEnumerable<OrderItem> GetAll();
         void Add(OrderItem OrderItem);
+        void Update(OrderItem OrderItem);
         void Remove(OrderItem OrderItem);
     }
 
@@ -25,6 +26,8 @@ namespace Online_Store.Data.Repositories
         public IEnumerable<OrderItem> GetAll() => _context.OrderItems.ToList();
 
         public void Add(OrderItem OrderItem) => _context.OrderItems.Add(OrderItem);
+        
+        public void Update(OrderItem orderItem) => _context.OrderItems.Update(orderItem);
 
         public void Remove(OrderItem OrderItem) => _context.OrderItems.Remove(OrderItem);
     }

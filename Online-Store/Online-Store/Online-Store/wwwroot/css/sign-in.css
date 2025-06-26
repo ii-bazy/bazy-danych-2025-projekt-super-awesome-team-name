@@ -54,6 +54,11 @@ button:hover {
     margin-top: 20px;
 }
 
+.alert alert-danger {
+    display: flex;
+    justify-content: center;
+}
+
 .product {
     background-color: #263238;
     color: #e0f7fa;

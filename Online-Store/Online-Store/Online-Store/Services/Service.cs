@@ -2,9 +2,25 @@
 using Online_Store.Data;
 using Online_Store.Data.Models;
 using Online_Store.Models;
+using System.Runtime.InteropServices;
 
 namespace Online_Store.Services
 {
+    public class BuyResult : IBuyResult
+    {
+        public BuyResult() 
+        {
+            Succes = true;
+        }
+
+        public BuyResult(string itemName)
+        {
+            Succes = false;
+            ItemName = itemName;
+        }
+        public bool Succes { get; }
+        public string? ItemName { get; }
+    }
     public class Service : IService
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -15,10 +31,10 @@ namespace Online_Store.Services
             {
                 Name = product.Name,
                 Description = product.Description,
-                Price = product.Price
+                Price = product.Price,
+                Quantity = product.Quantity
             };
         }
-
         private ViewUser UserToViewUser(User user)
         {
             return new ViewUser()
@@ -26,7 +42,6 @@ namespace Online_Store.Services
                 Username = user.Username
             };
         }
-
         private ViewOrder OrderItemToViewOrder(OrderItem orderItem)
         {
             return new ViewOrder()
@@ -36,7 +51,6 @@ namespace Online_Store.Services
                 ProductPrice = orderItem.Product.Price
             };
         }
-
         private ViewOrderGroup OrderGroupToViewOrderGroup(OrderGroup orderGroup)
         {
             var viewOrderGroup = new ViewOrderGroup()
@@ -51,7 +65,6 @@ namespace Online_Store.Services
 
             return viewOrderGroup;
         }
-
         private ViewCartItem OrderItemToViewCartItem(OrderItem orderItem)
         {
             return new ViewCartItem()
@@ -61,6 +74,23 @@ namespace Online_Store.Services
                 Quantity = orderItem.Quantity
             };
         }
+        private ViewNotification NotificationToViewNotification(Notification notification)
+        {
+            return new ViewNotification() { ItemName = notification.Product.Name, IsRead = notification.IsRead };
+        }
+
+        private Notification CreateNotification(Product product, User user)
+        {
+            return new Notification()
+            {
+                ShouldSend = false,
+                IsRead = false,
+                User = user,
+                Product = product
+            };
+        }
+
+
         public Service(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
@@ -91,13 +121,22 @@ namespace Online_Store.Services
             if (user != null) return true;
             return false;
         }
-        public string BuyCart(string username)
+        public IBuyResult BuyCart(string username)
         {
             var cart = _unitOfWork.OrderGroups.GetByUsernameAndStatus(username, "cart");
+            var user = _unitOfWork.Users.GetByUsername(username);
 
+            IBuyResult res = null;
+            
             foreach (var item in cart.OrderItems)
                 if (item.Quantity > item.Product.Quantity)
-                    return $"At least one of items in your cart ({item.Product.Name}) isn't avaible now. You will receive a notification as it appears. For now in order to buy cart, remove that product.";
+                {
+                    res = new BuyResult(item.Product.Name);
+                    var notification = this.CreateNotification(item.Product, user);
+                    _unitOfWork.Notifications.Add(notification);
+                }
+
+            if (res != null) return res;
 
             foreach (var item in cart.OrderItems)
             {
@@ -108,6 +147,7 @@ namespace Online_Store.Services
             }
 
             cart.Status = "payed";
+            cart.OrderDate = DateTime.Now;
             _unitOfWork.OrderGroups.Update(cart);
 
             var newCart = new OrderGroup()
@@ -119,26 +159,43 @@ namespace Online_Store.Services
 
             _unitOfWork.Complete();
 
-            return "Your products have been succefuly bought.";
+            return new BuyResult();
         }
 
-        // TODO: More than one item case
         public void AddToCart(string username, int productId)
         {
             var cart = _unitOfWork.OrderGroups.GetByUsernameAndStatus(username, "cart");
-            var product = _unitOfWork.Products.GetById(productId);
-            var orderItem = new OrderItem()
+            var item = cart.OrderItems.FirstOrDefault(oi => oi.ProductId == productId);
+
+            if (item != null)
             {
-                Product = product,
-                Quantity = 1,
+                item.Quantity += 1;
+                _unitOfWork.OrderItems.Update(item);
+            }
+            else
+            {
+                var product = _unitOfWork.Products.GetById(productId);
+                var orderItem = new OrderItem()
+                {
+                    Product = product,
+                    Quantity = 1,
 
-            };
-            cart.OrderItems.Add(orderItem);
+                };
+                cart.OrderItems.Add(orderItem);
 
-            _unitOfWork.OrderItems.Add(orderItem);
-
+                _unitOfWork.OrderItems.Add(orderItem);
+            }
             _unitOfWork.Complete();
 
+        }
+
+        public void ChangeNotificationIsRead(int id)
+        {
+            var notification = _unitOfWork.Notifications.GetById(id);
+            notification.IsRead ^= true;
+            _unitOfWork.Notifications.Update(notification);
+
+            _unitOfWork.Complete();
         }
         public void AddUser(string username, string hashedPassword, string roleName)
         {
@@ -230,6 +287,7 @@ namespace Online_Store.Services
 
             _unitOfWork.Complete();
         }
+
         public Dictionary<int, ViewProduct> GetIdViewProducts()
         {
             var viewProducts = new Dictionary<int, ViewProduct>();
@@ -239,7 +297,6 @@ namespace Online_Store.Services
 
             return viewProducts;
         }
-
         public Dictionary<int, ViewUser> GetIdViewUsers()
         {
             var viewUser = new Dictionary<int, ViewUser>();
@@ -249,17 +306,15 @@ namespace Online_Store.Services
 
             return viewUser;
         }
-
-        public Dictionary<int, ViewOrderGroup> GetIdOrderGroups()
+        public Dictionary<int, ViewOrderGroup> GetIdPayedOrderGroups()
         {
             var viewOrderGroup = new Dictionary<int, ViewOrderGroup>();
 
-            foreach (var orderGroup in _unitOfWork.OrderGroups.GetAll())
+            foreach (var orderGroup in _unitOfWork.OrderGroups.GetAllPayed())
                 viewOrderGroup[orderGroup.Id] = this.OrderGroupToViewOrderGroup(orderGroup);
 
             return viewOrderGroup;
         }
-
         public Dictionary<int, ViewCartItem> GetCartItems(string username)
         {
             Dictionary<int, ViewCartItem> viewCartItems = new Dictionary<int, ViewCartItem>();
@@ -270,6 +325,15 @@ namespace Online_Store.Services
                     viewCartItems.Add(item.Id, this.OrderItemToViewCartItem(item));
 
             return viewCartItems;
+        }
+        public Dictionary<int, ViewNotification> GetIdSendNotifications(string username)
+        {
+            var viewNotifications = new Dictionary<int, ViewNotification>();
+
+            foreach (var notification in _unitOfWork.Notifications.GetUsersRead(username))
+                viewNotifications.Add(notification.Id, NotificationToViewNotification(notification));
+
+            return viewNotifications;
         }
 
         public IDbContextTransaction BeginTransaction()

@@ -19,7 +19,7 @@ namespace Online_Store.Controllers
             _service = service;
             _products = _service.GetIdViewProducts();
             _users = _service.GetIdViewUsers();
-            _orderGroups = _service.GetIdOrderGroups();
+            _orderGroups = _service.GetIdPayedOrderGroups();
         }
 
         public IActionResult Index()
@@ -28,7 +28,7 @@ namespace Online_Store.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddProduct(string name, string description, string price)
+        public IActionResult AddProduct(string name, string description, string price, string quantity)
         {
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(description) || string.IsNullOrEmpty(price))
             {
@@ -42,6 +42,12 @@ namespace Online_Store.Controllers
                 return RedirectToAction("Index");
             }
 
+            if (!int.TryParse(quantity, NumberStyles.Any, CultureInfo.InvariantCulture, out int parsedQuantity) || parsedPrice <= 0)
+            {
+                TempData["ErrorMessage"] = "Invalid or negative quantity. Please enter a valid number.";
+                return RedirectToAction("Index");
+            }
+
             var newProduct = new ViewProduct
             {
                 Name = name,
@@ -49,9 +55,7 @@ namespace Online_Store.Controllers
                 Price = Math.Round(parsedPrice, 2)
             };
 
-            // TODO: Get real quantity
-
-            _service.AddProduct(name, description, (float)Math.Round(parsedPrice, 2), 0);
+            _service.AddProduct(name, description, (float)Math.Round(parsedPrice, 2), parsedQuantity);
 
             TempData["SuccessMessage"] = $"{name} has been added!";
             return RedirectToAction("Index");
@@ -66,21 +70,22 @@ namespace Online_Store.Controllers
                 return NotFound();
             }
             var item = new KeyValuePair<int, ViewProduct>(productId, product);
-            return View();
+
+            return View(item);
         }
 
         // Edition's form handler
         [HttpPost]
-        public IActionResult Edit(KeyValuePair<int, ViewProduct> model)
+        public IActionResult Edit(int id, string name, string description, float price, int quantity)
         {
             if (ModelState.IsValid)
             {
                 _service.UpdateProduct(
-                    model.Key, 
-                    model.Value.Name, 
-                    model.Value.Description, 
-                    (float) Math.Round(model.Value.Price, 2), 
-                    model.Value.Quantity);
+                    id, 
+                    name, 
+                    description,
+                    (float) Math.Round(price, 2), 
+                    quantity);
 
                 TempData["SuccessMessage"] = "Product updated successfully!";
                 return RedirectToAction("Index");

@@ -12,6 +12,11 @@ h1 {
     color: #cceeff;
 }
 
+.controls {
+    display: flex;
+    justify-content: center;
+}
+
 .top-buttons {
     text-align: right;
     margin-right: 20px;
