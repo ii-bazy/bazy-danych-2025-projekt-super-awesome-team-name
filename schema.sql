@@ -60,3 +60,38 @@ CREATE TABLE Notifications (
     should_send BIT NOT NULL,
     is_read BIT NOT NULL
 );
+
+-- Trigger na restock magazynu
+CREATE TRIGGER trg_NotifyRestock
+ON Products
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE n
+    SET n.should_send = 1,
+        n.is_read = 0
+    FROM Notifications n
+    JOIN inserted i ON n.product_id = i.id
+    JOIN deleted d ON d.id = i.id
+    WHERE d.quantity = 0 AND i.quantity > 0;
+END;
+GO
+
+-- Trigger na spóźnionych klientów, którzy nie zdążyli przeczytać powiadomienia, zanim ktoś kupił dany produkt
+CREATE TRIGGER trg_NotifyOutOfStock
+ON Products
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE n
+    SET n.should_send = 0
+    FROM Notifications n
+    JOIN inserted i ON n.product_id = i.id
+    JOIN deleted d ON d.id = i.id
+    WHERE i.quantity = 0 AND n.is_read = 0;
+END;
+GO
