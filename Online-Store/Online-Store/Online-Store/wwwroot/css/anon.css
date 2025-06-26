@@ -3,45 +3,25 @@ body {
     font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
     text-align: center;
     color: #e0f7fa;
-    margin-top: 30vh;
+    margin-top: 10vh;
 }
 
 h1 {
     font-size: 40px;
     margin-bottom: 10px;
-    color: #cceeff;
 }
 
 .controls {
+    margin: 3rem;
     display: flex;
-    justify-content: center;
-}
-
-.top-buttons {
-    text-align: right;
-    margin-right: 20px;
-}
-
-.top-buttons button {
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 0;
-    background-color: #1E88E5;
-    color: white;
-    font-family: inherit;
-    cursor: pointer;
-    margin-left: 10px;
-    width: auto;
-    border: none;
+    justify-content: space-between;
 }
 
 label {
     font-size: 20px;
-    margin-top: 20px;
-    display: block;
-    text-align: left;
-    margin-left: 20px;
-    color: #e0f7fa;
+    display: flex;
+    text-align: center;
+    align-items: center;
 }
 
 input {
@@ -49,47 +29,69 @@ input {
     margin: 10px;
     font-size: 16px;
     border-radius: 0;
-    border: 1px solid #12324a;
-    background-color: #0f2b44;
+    border: 1px solid #444;
+    background-color: #2a2f40;
     color: #e0f7fa;
-    box-sizing: border-box;
-    width: 300px;
+    width: 100%
 }
 
 button {
     padding: 10px 20px;
     margin: 10px;
-    font-size: 16px;
+    font-size: 18px;
     border-radius: 0;
     height: auto;
-    background-color: #43A047;
+    line-height: normal;
+    vertical-align: middle;
+    background-color: #1565C0;
     color: white;
-    font-family: inherit;
+    font-family: 'Segoe UI', sans-serif;
     cursor: pointer;
     border: none;
 }
 
-button:hover,
-.top-buttons button:hover {
-    background-color: #1565C0;
-}
+    button:hover {
+        background-color: #1e88e5;
+    }
 
 #results {
     margin-top: 20px;
-    color: #e0f7fa;
 }
 
 .product {
-    background-color: #e0f7fa;
-    color: #0A1F33;
+    background-color: #2a2f40;
+    color: #e0f7fa;
     padding: 10px;
-    margin: 10px auto;
-    width: 320px;
+    margin: 10px;
     border-radius: 0;
-    border: 1px solid #12324a;
-    box-shadow: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
 p {
     margin-bottom: 5px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.alert {
+    padding: 15px;
+    margin-top: 20px;
+    background-color: #00796B;
+    color: #e0f7fa;
+    border-radius: 0;
+    font-size: 16px;
+}
+
+.alert-success {
+    background-color: #1b5e20;
+}
+
+.top-buttons {
+    text-align: right;
+    margin-right: 20px;
 }

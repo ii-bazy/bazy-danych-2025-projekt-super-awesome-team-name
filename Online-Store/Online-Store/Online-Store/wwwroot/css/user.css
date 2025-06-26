@@ -3,7 +3,7 @@ body {
   font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
   text-align: center;
   color: #e0f7fa;
-  margin-top: 30vh;
+  margin-top: 10vh;
 }
 
 h1 {
@@ -12,24 +12,27 @@ h1 {
 }
 
 .controls {
+    margin: 3rem;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
 }
 
 label {
-  font-size: 20px;
-  margin-top: 20px;
-  display: block;
+    font-size: 20px;
+    display: flex;
+    text-align: center;
+    align-items: center;
 }
 
 input {
-  padding: 10px;
-  margin: 10px;
-  font-size: 16px;
-  border-radius: 0;
-  border: 1px solid #444;
-  background-color: #2a2f40;
-  color: #e0f7fa;
+    padding: 10px;
+    margin: 10px;
+    font-size: 16px;
+    border-radius: 0;
+    border: 1px solid #444;
+    background-color: #2a2f40;
+    color: #e0f7fa;
+    width: 100%
 }
 
 button {

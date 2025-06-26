@@ -10,7 +10,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Panel - Product Management</title>
-    <link rel="stylesheet" href="~/css/admin.css">
+    <link rel="stylesheet" href="~/css/admin.css?v=1.1">
 </head>
 <body>
     <div class="top-buttons">
@@ -36,18 +36,27 @@
 
     <h1>Add Product</h1>
     <form asp-controller="Admin" asp-action="AddProduct" method="post">
-        <label for="productName">Product Name:</label>
-        <input type="text" id="productName" name="name" required />
+        <div class="form-data">
+            <label class="data-label" for="productName">Product Name:</label>
+            <input class="data-input" type="text" id="productName" name="name" required />
+        </div>
+        
+        <div class="form-data">
+            <label class="data-label" for="productDescription">Product Description:</label>
+            <input class="data-input" type="text" id="productDescription" name="description" required />
+        </div>
+        
 
-        <label for="productDescription">Product Description:</label>
-        <input type="text" id="productDescription" name="description" required />
-
-        <label for="productPrice">Product Price:</label>
-        <input type="number" id="productPrice" name="price" step="0.01" required />
-
-        <label for="productQuantity">In the stock:</label>
-        <input type="number" id="productQuantity" name="quantity" step="1" min="0" required />
-
+        <div class="form-data">
+            <label class="data-label" for="productPrice">Product Price:</label>
+            <input class="data-input" type="number" id="productPrice" name="price" step="0.01" required />
+        </div>
+       
+        <div class="form-data">
+            <label class="data-label" for="productQuantity">In the stock:</label>
+            <input class="data-input" type="number" id="productQuantity" name="quantity" step="1" min="0" required />
+        </div>
+        
         <div>
             <button type="submit">Add Product</button>
         </div>
@@ -61,7 +70,7 @@
                 <h3>@item.Value.Name</h3>
                 <p>@item.Value.Description</p>
                 <p>Price: $@item.Value.Price</p>
-                <p>Left in the stock: @item.Value.Quantity</p>
+                <p>Left in stock: @item.Value.Quantity</p>
                 <form asp-controller="Admin" asp-action="Delete" method="post" style="display: inline;">
                     <input type="hidden" name="productId" value="@item.Key" />
                     <button type="submit" class="delete-button">Delete</button>

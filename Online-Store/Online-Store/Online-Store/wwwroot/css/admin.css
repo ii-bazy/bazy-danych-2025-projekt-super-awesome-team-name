@@ -39,6 +39,18 @@ h1 {
     margin: 0 auto;
 }
 
+.form-data {
+    display: flex;
+}
+
+.data-label{
+    text-align: right
+}
+
+.data-input{
+    width: 100%
+}
+
 label {
     font-size: 20px;
     margin-top: 20px;

@@ -3,7 +3,7 @@ body {
     font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
     text-align: center;
     color: #e0f7fa;
-    margin-top: 30vh;
+    margin-top: 10vh;
 }
 
 h1 {
@@ -55,6 +55,14 @@ button:hover {
 
 #results {
     margin-top: 20px;
+}
+
+.orderGroup {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    margin: 2rem;
+    background-color: #232734;
 }
 
 .product,

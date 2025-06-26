@@ -153,7 +153,7 @@ namespace Online_Store.Services
                 _unitOfWork.Products.Update(product);
             }
 
-            cart.Status = "payed";
+            cart.Status = "completed";
             cart.OrderDate = DateTime.Now;
             _unitOfWork.OrderGroups.Update(cart);
 

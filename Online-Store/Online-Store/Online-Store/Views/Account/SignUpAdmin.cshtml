@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Online Store - Sign Up (Admin)</title>
-    <link rel="stylesheet" href="/css/sign-in-admin.css">
+    <link rel="stylesheet" href="~/css/sign-in-admin.css?v=1.1">
 </head>
 <body>
     <h1>Online Store - Sign Up (Admin)</h1>
@@ -13,11 +13,11 @@
     <div class="sign-in-form">
         @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
         {
-            <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+            <div class="my-alert">@ViewBag.ErrorMessage</div>
         }
 
 
-        <form asp-action="SignUpAdmin" asp-controller="Account" method="post">
+        <form asp-action="SignUpAdmin" asp-controller="Account" method="post" class="log-form">
             <label for="username">Username:</label>
             <input type="text" id="username" name="Username" value="@Model.Username" placeholder="Username" required>
 

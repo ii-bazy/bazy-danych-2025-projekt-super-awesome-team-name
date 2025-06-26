@@ -10,7 +10,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Online Store - Anonymous User</title>
-    <link rel="stylesheet" href="~/css/anon.css?v=1.5">
+    <link rel="stylesheet" href="~/css/anon.css?v=1.6">
 </head>
 <body>
     <div class="top-buttons">
@@ -40,7 +40,7 @@
                 <h3>@product.Name</h3>
                 <p>@product.Description</p>
                 <p>Price: $@product.Price</p>
-                <p>Left in the stock: @product.Quantity</p>
+                <p>Left in stock: @product.Quantity</p>
             </div>
         }
         @if (Model.Count == 0)
