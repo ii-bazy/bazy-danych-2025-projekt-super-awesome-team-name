@@ -1,9 +1,9 @@
 import pyodbc
 
-# Konfiguracja połączenia – dostosuj do siebie
+# Konfiguracja połączenia
 SERVER = 'localhost\\SQLEXPRESS'  # lub nazwa instancji
 DATABASE = 'bd_project'
-DRIVER = 'ODBC Driver 17 for SQL Server'  # upewnij się, że masz ten sterownik
+DRIVER = 'ODBC Driver 17 for SQL Server'
 
 def get_connection():
     try:
@@ -15,11 +15,7 @@ def get_connection():
         print("Błąd połączenia z bazą danych:", e)
         return None
 
-def get_sales_data():
-    """
-    Przykładowe dane: łączna sprzedaż produktów.
-    Zwraca listę krotek (nazwa produktu, sprzedana ilość)
-    """
+def get_sales_data(): # przykładowe dane do wykresu
     conn = get_connection()
     if not conn:
         return []
@@ -43,12 +39,28 @@ def get_sales_data():
     finally:
         conn.close()
 
-def get_dynamic_data(x_choice, y_choice):
+
+def get_dynamic_data(x_choice, y_choice, date_from=None, date_to=None):
     conn = get_connection()
     if not conn:
         return []
 
-    # Mapowanie wyborów na kolumny i agregacje
+    where_clauses = []
+    params = []
+
+    # Dodaj warunki filtrowania statusu
+    where_clauses.append("og.status NOT IN (?, ?)")
+    params.extend(['cart', 'cancelled'])
+
+    if date_from:
+        where_clauses.append("og.order_date >= ?")
+        params.append(date_from)
+    if date_to:
+        where_clauses.append("og.order_date <= ?")
+        params.append(date_to)
+
+    where_sql = "WHERE " + " AND ".join(where_clauses) if where_clauses else ""
+
     x_map = {
         "Produkt": "p.name",
         "Użytkownik": "u.username",
@@ -57,31 +69,63 @@ def get_dynamic_data(x_choice, y_choice):
 
     y_map = {
         "Liczba zamówień": "COUNT(DISTINCT og.id)",
-        "Liczba sztuk": "SUM(oi.quantity)",
+        "Liczba zamówionych sztuk": "SUM(oi.quantity)",
         "Suma wydatków": "SUM(oi.quantity * p.price)"
     }
 
-    x = x_map.get(x_choice)
-    y = y_map.get(y_choice)
-
-    if not x or not y:
-        return []
-
-    query = f"""
-        SELECT {x} AS label, {y} AS value
-        FROM OrderItems oi
-        JOIN OrderGroups og ON oi.order_group_id = og.id
-        JOIN Users u ON og.user_id = u.id
-        JOIN Products p ON oi.product_id = p.id
-        GROUP BY {x}
-        ORDER BY value DESC
-    """
-
     try:
         cursor = conn.cursor()
-        cursor.execute(query)
-        results = cursor.fetchall()
-        return [(str(row[0]), row[1]) for row in results]
+
+        x = x_map.get(x_choice)
+
+        # Obsługa średnich dla dowolnego x_choice
+        if y_choice == "Średnia liczba sztuk w zamówieniu":
+            query = f"""
+                SELECT {x} AS label,
+                       CAST(SUM(oi.quantity) AS FLOAT) / COUNT(DISTINCT og.id) AS value
+                FROM OrderItems oi
+                JOIN OrderGroups og ON oi.order_group_id = og.id
+                JOIN Users u ON og.user_id = u.id
+                JOIN Products p ON oi.product_id = p.id
+                {where_sql}
+                GROUP BY {x}
+                ORDER BY value DESC
+            """
+            cursor.execute(query, params)
+            return [(str(row[0]), row[1]) for row in cursor.fetchall()]
+
+        if y_choice == "Średnia wartość zamówienia":
+            query = f"""
+                SELECT {x} AS label,
+                       CAST(SUM(oi.quantity * p.price) AS FLOAT) / COUNT(DISTINCT og.id) AS value
+                FROM OrderItems oi
+                JOIN OrderGroups og ON oi.order_group_id = og.id
+                JOIN Users u ON og.user_id = u.id
+                JOIN Products p ON oi.product_id = p.id
+                {where_sql}
+                GROUP BY {x}
+                ORDER BY value DESC
+            """
+            cursor.execute(query, params)
+            return [(str(row[0]), row[1]) for row in cursor.fetchall()]
+
+        y = y_map.get(y_choice)
+        if not x or not y:
+            return []
+
+        query = f"""
+            SELECT {x} AS label, {y} AS value
+            FROM OrderItems oi
+            JOIN OrderGroups og ON oi.order_group_id = og.id
+            JOIN Users u ON og.user_id = u.id
+            JOIN Products p ON oi.product_id = p.id
+            {where_sql}
+            GROUP BY {x}
+            ORDER BY value DESC
+        """
+        cursor.execute(query, params)
+        return [(str(row[0]), row[1]) for row in cursor.fetchall()]
+
     except Exception as e:
         print("Błąd podczas dynamicznego zapytania:", e)
         return []
