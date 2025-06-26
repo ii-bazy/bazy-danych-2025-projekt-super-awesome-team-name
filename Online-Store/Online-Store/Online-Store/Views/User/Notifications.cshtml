@@ -22,6 +22,9 @@
     }
 
     <p>Here are your notifications</p>
+    <form method="post" action="@Url.Action("Index", "User")">
+        <button type="submit">Back to user panel</button>
+    </form>
 
     @if (Model != null && Model.Any())
     {
@@ -31,7 +34,7 @@
                 @if (item.Value.IsRead)
                 {
                     <li class="notification__item">
-                        <p>Item @item.Value.ItemName is back in stock! Don't miss it!</p>
+                        <p>@item.Value.ItemName is back in stock! Don't miss it!</p>
                         <form method="post" asp-action="UpdateNotification" asp-controller="User">
                             <input type="hidden" name="notificationId" value="@item.Key" />
                             <button type="submit">Unread</button>
@@ -40,8 +43,8 @@
                 }
                 else
                 {
-                    <li class="notification__item --unread">
-                        <p>Item @item.Value.ItemName is back in stock! Don't miss it!</p>
+                    <li class="notification__item notification__item--unread">
+                        <p>@item.Value.ItemName is back in stock! Don't miss it!</p>
                         <form method="post" asp-action="UpdateNotification" asp-controller="User">
                             <input type="hidden" name="notificationId" value="@item.Key" />
                             <button type="submit">Read</button>

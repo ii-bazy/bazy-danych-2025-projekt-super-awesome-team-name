@@ -54,8 +54,14 @@ button:hover {
   background-color: #1e88e5;
 }
 
+.notification__button--unread {
+    border: 2px solid #2ecc71;
+    box-shadow: 0 0px 40px 0px rgba(46, 204, 113, 0.7);
+    position: relative;
+}
+
 #results {
-  margin-top: 20px;
+    margin-top: 20px;
 }
 
 .product {

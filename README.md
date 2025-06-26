@@ -39,6 +39,6 @@ Hanna Laszkiewicz & Bartosz Marchewka 🥕
         - [ ] Add schema
     * css files
         - [x] Add
-        - [ ] Center alert in `Account`
-        - [ ] Center labels in `Admin`
-        - [ ] `Admin`'s `Orders` view 
+        - [x] Center alert in `Account`
+        - [x] Center labels in `Admin`
+        - [x] `Admin`'s `Orders` view 

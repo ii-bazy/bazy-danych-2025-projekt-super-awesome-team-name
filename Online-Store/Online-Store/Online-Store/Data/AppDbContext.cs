@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Online_Store.Data.Models;
-using Online_Store.Models;
 
 namespace Online_Store.Data;
 
@@ -39,7 +38,7 @@ public partial class AppDbContext : DbContext
     {
         modelBuilder.Entity<Notification>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Notifica__3213E83FF9F9592B");
+            entity.HasKey(e => e.Id).HasName("PK__Notifica__3213E83F50261F48");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.IsRead).HasColumnName("is_read");
@@ -59,7 +58,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<OrderGroup>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__OrderGro__3213E83F4CCFF860");
+            entity.HasKey(e => e.Id).HasName("PK__OrderGro__3213E83F3FA88EE2");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.OrderDate)
@@ -78,7 +77,9 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<OrderItem>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__OrderIte__3213E83F51D6F6AD");
+            entity.HasKey(e => e.Id).HasName("PK__OrderIte__3213E83F7E5E9528");
+
+            entity.ToTable(tb => tb.HasTrigger("trg_UpdateCartOrderDate"));
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.OrderGroupId).HasColumnName("order_group_id");
@@ -97,7 +98,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<Password>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Password__3213E83F6089ACE3");
+            entity.HasKey(e => e.Id).HasName("PK__Password__3213E83F7F2FCDC4");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.PasswordHash).HasColumnName("password_hash");
@@ -105,7 +106,13 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Products__3213E83FAB73E2F7");
+            entity.HasKey(e => e.Id).HasName("PK__Products__3213E83FB95970FD");
+
+            entity.ToTable(tb =>
+                {
+                    tb.HasTrigger("trg_NotifyOutOfStock");
+                    tb.HasTrigger("trg_NotifyRestock");
+                });
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Description)
@@ -120,7 +127,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Roles__3213E83F51039798");
+            entity.HasKey(e => e.Id).HasName("PK__Roles__3213E83FAA22510B");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.RoleName)
@@ -130,9 +137,9 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Users__3213E83F441273E6");
+            entity.HasKey(e => e.Id).HasName("PK__Users__3213E83F6AE95731");
 
-            entity.HasIndex(e => e.Username, "UQ__Users__F3DBC5726B5097F8").IsUnique();
+            entity.HasIndex(e => e.Username, "UQ__Users__F3DBC5724D32D98C").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.PasswordId).HasColumnName("password_id");

@@ -10,7 +10,7 @@ namespace Online_Store.Data.Repositories
 
         OrderGroup GetByUsernameAndStatus(string username, string status);
         IEnumerable<OrderGroup> GetAll();
-        IEnumerable<OrderGroup> GetAllPayed();
+        IEnumerable<OrderGroup> GetAllBesidesCarts();
         void Add(OrderGroup OrderGroup);
         void Remove(OrderGroup OrderGroup);
         void Update(OrderGroup OrderGroup);
@@ -35,9 +35,9 @@ namespace Online_Store.Data.Repositories
             
         public IEnumerable<OrderGroup> GetAll() => _context.OrderGroups.ToList();
 
-        public IEnumerable<OrderGroup> GetAllPayed() => 
+        public IEnumerable<OrderGroup> GetAllBesidesCarts() => 
             _context.OrderGroups
-            .Where(o => o.Status == "payed")
+            .Where(o => o.Status != "cart")
             .Include(o => o.OrderItems)
             .ThenInclude(oi => oi.Product)
             .ToList();

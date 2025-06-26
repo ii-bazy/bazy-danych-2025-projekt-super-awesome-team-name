@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Online_Store.Data.Models;
 
-namespace Online_Store.Models;
+namespace Online_Store.Data.Models;
 
 public partial class OrderGroup
 {

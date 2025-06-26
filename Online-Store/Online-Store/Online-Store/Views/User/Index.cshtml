@@ -15,7 +15,7 @@
 <body>
     <div class="top-buttons">
         <form asp-action="Notifications" asp-controller="User" method="post">
-            <button class="@("notification__button" + (Model.HasUnreadNotification ? " --unread" : " "))" type="submit">Notifications</button>
+            <button class="@("notification__button" + (Model.HasUnreadNotification ? "--unread" : " "))" type="submit">Notifications</button>
         </form>
         <form asp-action="SignOut" asp-controller="Account" method="post">
             <button type="submit">Sign Out</button>

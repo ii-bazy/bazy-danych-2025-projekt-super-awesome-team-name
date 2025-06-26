@@ -316,7 +316,7 @@ namespace Online_Store.Services
         {
             var viewOrderGroup = new Dictionary<int, ViewOrderGroup>();
 
-            foreach (var orderGroup in _unitOfWork.OrderGroups.GetAllPayed())
+            foreach (var orderGroup in _unitOfWork.OrderGroups.GetAllBesidesCarts())
                 viewOrderGroup[orderGroup.Id] = this.OrderGroupToViewOrderGroup(orderGroup);
 
             return viewOrderGroup;

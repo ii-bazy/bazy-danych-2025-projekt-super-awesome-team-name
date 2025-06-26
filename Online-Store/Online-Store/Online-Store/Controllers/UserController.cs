@@ -62,7 +62,6 @@ namespace Online_Store.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
         public IActionResult Notifications()
         {
             _notifications = _service.GetIdSendNotifications(User.Identity?.Name);

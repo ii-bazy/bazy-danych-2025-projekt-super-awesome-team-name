@@ -1,0 +1,64 @@
+﻿body {
+    background-color: #1a1f2d;
+    font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+    text-align: center;
+    color: #e0f7fa;
+    margin-top: 30px;
+}
+
+h1 {
+    font-size: 40px;
+    margin-bottom: 10px;
+    color: #cceeff;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 16px;
+    border-radius: 0;
+    height: auto;
+    line-height: normal;
+    vertical-align: middle;
+    background-color: #1565C0;
+    color: white;
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+}
+
+.success {
+    color: #0f5132;
+    background-color: #d1e7dd;
+    border-color: #badbcc;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+    button:hover {
+        background-color: #0d47a1;
+    }
+
+#notifications {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.notification__item {
+    background-color: #263238;
+    color: #e0f7fa;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    border: 1px solid #37474f;
+}
+
+    .notification__item--unread {
+        border: 1px solid #2ecc71; 
+        box-shadow: 0 4px 15px -2px rgba(46, 204, 113, 0.7); 
+        position: relative;
+    }
