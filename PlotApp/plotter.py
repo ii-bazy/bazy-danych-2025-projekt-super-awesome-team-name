@@ -25,7 +25,6 @@ class Plotter:
 
         ax.set_ylabel(y_choice)
         ax.set_xlabel(x_choice)
-        ax.set_title(f"{y_choice} by {x_choice}")
 
         if plot_type == "Słupkowy":
             ax.bar(labels, values)
