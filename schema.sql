@@ -96,3 +96,19 @@ BEGIN
     WHERE i.quantity = 0 AND n.is_read = 0;
 END;
 GO
+
+-- Trigger na aktualizację daty modyfikacji koszyka
+CREATE TRIGGER trg_UpdateCartOrderDate
+ON OrderItems
+AFTER INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE og
+    SET order_date = GETDATE()
+    FROM OrderGroups og
+    JOIN inserted i ON og.id = i.order_group_id
+    WHERE og.status = 'cart';
+END;
+GO
