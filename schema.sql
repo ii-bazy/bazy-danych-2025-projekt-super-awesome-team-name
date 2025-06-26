@@ -41,7 +41,7 @@ CREATE TABLE OrderGroups (
     id INT IDENTITY(1,1) PRIMARY KEY,
     user_id INT NOT NULL FOREIGN KEY REFERENCES Users(id) ON DELETE CASCADE,
     order_date DATETIME NOT NULL DEFAULT GETDATE(),
-    [status] NVARCHAR(20) NOT NULL;
+    [status] NVARCHAR(20) NOT NULL
 );
 
 -- Tabela OrderItems
@@ -60,6 +60,7 @@ CREATE TABLE Notifications (
     should_send BIT NOT NULL,
     is_read BIT NOT NULL
 );
+GO
 
 -- Trigger na restock magazynu
 CREATE TRIGGER trg_NotifyRestock
