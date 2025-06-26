@@ -1,11 +1,10 @@
 import matplotlib.pyplot as plt
-from datetime import datetime
-import matplotlib.dates as mdates
 from db import get_dynamic_data
 
 
 class Plotter:
-    def plot_dynamic(self, ax, plot_type, x_choice, y_choice, date_from=None, date_to=None):
+    @staticmethod
+    def plot_dynamic(ax, plot_type, x_choice, y_choice, date_from=None, date_to=None):
         data = get_dynamic_data(x_choice, y_choice, date_from, date_to)
 
         if not data:
@@ -27,42 +26,16 @@ class Plotter:
         ax.set_xlabel(x_choice)
 
         if plot_type == "Słupkowy":
-            ax.bar(labels, values)
+            ax.bar(range(len(labels)), values)
             ax.set_ylim(bottom=ylim_bottom, top=ylim_top)
+
             ax.set_xticks(range(len(labels)))
+            ax.set_xticklabels(labels, rotation=45, ha='right')
+
             if len(labels) > 10:
                 ax.xaxis.set_major_locator(plt.MaxNLocator(nbins=10))
-            ax.set_xticklabels(labels, rotation=45, ha='right')
             plt.setp(ax.get_xticklabels(), ha="right")
             ax.tick_params(axis='x', rotation=45)
-
-        elif plot_type == "Liniowy":
-            if x_choice == "Data":
-                try:
-                    date_labels_dt = [datetime.strptime(str(label), '%Y-%m-%d') for label in labels]
-                    ax.plot(date_labels_dt, values, marker='o')
-                    ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
-                    ax.xaxis.set_major_locator(mdates.AutoDateLocator())  # Zmieniono tutaj
-                    ax.tick_params(axis='x', rotation=45)
-                    ax.set_ylim(bottom=ylim_bottom, top=ylim_top)
-                except ValueError:
-                    ax.plot(labels, values, marker='o')
-                    ax.set_ylim(bottom=ylim_bottom, top=ylim_top)
-                    ax.set_xticks(range(len(labels)))
-                    if len(labels) > 10:
-                        ax.xaxis.set_major_locator(plt.MaxNLocator(nbins=10))
-                    ax.set_xticklabels(labels, rotation=45, ha='right')
-                    plt.setp(ax.get_xticklabels(), ha="right")
-                    ax.tick_params(axis='x', rotation=45)
-            else:
-                ax.plot(labels, values, marker='o')
-                ax.set_ylim(bottom=ylim_bottom, top=ylim_top)
-                ax.set_xticks(range(len(labels)))
-                if len(labels) > 10:
-                    ax.xaxis.set_major_locator(plt.MaxNLocator(nbins=10))
-                ax.set_xticklabels(labels, rotation=45, ha='right')
-                plt.setp(ax.get_xticklabels(), ha="right")
-                ax.tick_params(axis='x', rotation=45)
 
         else:
             ax.text(0.5, 0.5, "Nieznany typ wykresu", ha='center', va='center', transform=ax.transAxes)

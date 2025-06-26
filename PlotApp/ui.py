@@ -20,11 +20,6 @@ class SalesDashboard:
         top_frame = ttk.Frame(self.root)
         top_frame.pack(side=tk.TOP, fill=tk.X, padx=0, pady=(10, 5))
 
-        # Typ wykresu
-        self.plot_type = ttk.Combobox(top_frame, values=["Słupkowy", "Liniowy"], width=10)
-        self.plot_type.set("Słupkowy")
-        self.plot_type.pack(side=tk.LEFT, padx=5, pady=5)
-
         # Etykieta X
         x_label = ttk.Label(top_frame, text="Oś X:")
         x_label.pack(side=tk.LEFT, padx=(10, 2))
@@ -69,12 +64,11 @@ class SalesDashboard:
         plot_button = ttk.Button(top_frame, text="Generuj wykres", command=self.update_plot)
         plot_button.pack(side=tk.LEFT, padx=5)
 
-        self.widgets_to_toggle = [self.plot_type, self.x_axis]
+        self.widgets_to_toggle = [self.x_axis]
 
         self.figure = Figure(figsize=(8, 5), dpi=100)
         self.ax = self.figure.add_subplot(111)
         self.canvas = FigureCanvasTkAgg(self.figure, master=self.root)
-
 
         self.canvas.get_tk_widget().pack(
             fill=tk.BOTH,
@@ -85,7 +79,7 @@ class SalesDashboard:
 
     def update_plot(self):
         self.ax.clear()
-        plot_type = self.plot_type.get()
+        plot_type = "Słupkowy"
         x_choice = self.x_axis.get()
         y_choice = self.y_axis.get()
         date_from = self.date_from.get()
