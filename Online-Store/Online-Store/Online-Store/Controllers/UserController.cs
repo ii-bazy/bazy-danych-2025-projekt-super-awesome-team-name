@@ -36,7 +36,12 @@ namespace Online_Store.Controllers
         public IActionResult Search(string query)
         {
             _notifications = _service.GetIdSendNotifications(User.Identity?.Name);
-            var result = _products.Where(p => p.Value.Name.Contains(query) || p.Value.Description.Contains(query)).ToList();
+
+            query = query?.ToLower() ?? "";
+
+            var result = _products.Where(
+                p => p.Value.Name.ToLower().Contains(query) ||
+                p.Value.Description.ToLower().Contains(query)).ToList();
             bool flag = _notifications.Any(n => !n.Value.IsRead);
 
             var model = new ViewProductsWithNotificationFlag()

@@ -5,12 +5,15 @@ using Microsoft.AspNetCore.Mvc;
 using Online_Store.Models;
 using System.Security.Claims;
 using Online_Store.Services;
+using Microsoft.AspNetCore.Identity;
 
 namespace Online_Store.Controllers
 {
     public class AccountController : Controller
     {
         private readonly IService _service;
+        private readonly PasswordHasher<string> _passwordHasher = new();
+
         public AccountController(IService service) 
         {
             _service = service;
@@ -25,33 +28,41 @@ namespace Online_Store.Controllers
         [HttpPost]
         public IActionResult SignIn(ViewAccount model)
         {
-            // TODO: Hash
-            var user = _service.GetByUsernameAndPassword(model.Username, model.Password);
+            var user = _service.GetByUsername(model.Username);
 
             if (user != null)
             {
-                var claims = new List<Claim>
+                var result = _passwordHasher.VerifyHashedPassword(model.Username, user.Password.PasswordHash, model.Password);
+                if (result == PasswordVerificationResult.Success)
                 {
-                    new(ClaimTypes.Name, user.Username),
-                    new(ClaimTypes.Role, "User")
-                };
+                    var claims = new List<Claim>
+                    {
+                        new(ClaimTypes.Name, user.Username),
+                        new(ClaimTypes.Role, "User")
+                    };
 
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                var authProperties = new AuthenticationProperties
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var authProperties = new AuthenticationProperties
+                    {
+                        IsPersistent = false // Saves even after clowsing brawser
+                    };
+
+                    HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                                             new ClaimsPrincipal(claimsIdentity),
+                                             authProperties).Wait(); // Wait for sync
+
+                    TempData["SuccessMessage"] = $"Welcome, {user.Username}!";
+                    return RedirectToAction("Index", "User");
+                }
+                else
                 {
-                    IsPersistent = false // Saves even after clowsing brawser
-                };
-
-                HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                                         new ClaimsPrincipal(claimsIdentity),
-                                         authProperties).Wait(); // Wait for sync
-
-                TempData["SuccessMessage"] = $"Welcome, {user.Username}!";
-                return RedirectToAction("Index", "User");
+                    ViewBag.ErrorMessage = "Invalid password.";
+                    return View(model);
+                }
             }
             else
             {
-                ViewBag.ErrorMessage = "Invalid username or password.";
+                ViewBag.ErrorMessage = "Invalid username.";
                 return View(model);
             }
         }
@@ -65,28 +76,37 @@ namespace Online_Store.Controllers
         [HttpPost]
         public IActionResult SignInAdmin(ViewAccount model)
         {
-            var admin = _service.GetByUsernameAndPassword(model.Username, model.Password);
+            var admin = _service.GetByUsername(model.Username);
 
             if (admin != null)
             {
-                var claims = new List<Claim>
-            {
-                new(ClaimTypes.Name, admin.Username),
-                new(ClaimTypes.Role, "Admin")
-            };
-
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                var authProperties = new AuthenticationProperties
+                var result = _passwordHasher.VerifyHashedPassword(model.Username, admin.Password.PasswordHash, model.Password);
+                if (result == PasswordVerificationResult.Success)
                 {
-                    IsPersistent = true 
-                };
+                    var claims = new List<Claim>
+                    {
+                        new(ClaimTypes.Name, admin.Username),
+                        new(ClaimTypes.Role, "Admin")
+                    };
 
-                HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                                         new ClaimsPrincipal(claimsIdentity),
-                                         authProperties).Wait();
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var authProperties = new AuthenticationProperties
+                    {
+                        IsPersistent = true 
+                    };
 
-                TempData["SuccessMessage"] = $"Welcome,  Admin {admin.Username}!";
-                return RedirectToAction("Index", "Admin");
+                    HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                                             new ClaimsPrincipal(claimsIdentity),
+                                             authProperties).Wait();
+
+                    TempData["SuccessMessage"] = $"Welcome,  Admin {admin.Username}!";
+                    return RedirectToAction("Index", "Admin");
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = "Invalid admin credentials.";
+                    return View("SignInAdmin", model);
+                }
             }
             else
             {
@@ -127,7 +147,8 @@ namespace Online_Store.Controllers
                 return View(model); 
             }
 
-            _service.AddUser(model.Username, model.Password, "Customer");
+            string hashedPassword = _passwordHasher.HashPassword(model.Username, model.Password);
+            _service.AddUser(model.Username, hashedPassword, "Customer");
 
             TempData["SuccessMessage"] = "Your account has been created. You can now log in!";
             return RedirectToAction("SignIn");
@@ -157,7 +178,8 @@ namespace Online_Store.Controllers
                 return View(model);
             }
 
-            _service.AddUser(model.Username, model.Password, "Admin");
+            string hashedPassword = _passwordHasher.HashPassword(model.Username, model.Password);
+            _service.AddUser(model.Username, hashedPassword, "Admin");
 
             TempData["SuccessMessage"] = "Admin account has been created. You can now log in!";
             return RedirectToAction("SignInAdmin");  

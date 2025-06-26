@@ -27,6 +27,12 @@
             @TempData["SuccessMessage"]
         </div>
     }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-fail">
+            @TempData["ErrorMessage"]
+        </div>
+    }
 
     <h1>Add Product</h1>
     <form asp-controller="Admin" asp-action="AddProduct" method="post">

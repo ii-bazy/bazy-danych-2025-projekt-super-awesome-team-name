@@ -29,7 +29,7 @@
 
         <div>
             <label for="productQuantity">In the stock:</label>
-            <input type="number" id="productQuantity" name="quantity" value="@Model.Value.Quantity" step="1" min="0" required />
+            <input type="number" id="productQuantity" name="quantity" value="@Model.Value.Quantity.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)" step="1" min="0" required />
         </div>
         
 

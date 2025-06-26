@@ -15,7 +15,7 @@ Hanna Laszkiewicz & Bartosz Marchewka 🥕
     * `Account` Controller
         - [x] Add 
         - [x] Use database
-        - [ ] Add password hashing
+        - [x] Add password hashing
     * `User` Controller
         - [x] Add 
         - [x] Refactor `AddToCart`

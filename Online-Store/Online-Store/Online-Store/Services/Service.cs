@@ -114,7 +114,10 @@ namespace Online_Store.Services
             if (user.Password.PasswordHash == hashedPassword) return user;
             return null;
         }
-
+        public User? GetByUsername(string username)
+        {
+            return _unitOfWork.Users.GetByUsername(username);
+        }
         public bool IsUsernameUsed(string username)
         {
             User user = _unitOfWork.Users.GetByUsername(username);
@@ -136,7 +139,11 @@ namespace Online_Store.Services
                     _unitOfWork.Notifications.Add(notification);
                 }
 
-            if (res != null) return res;
+            if (res != null)
+            {
+                _unitOfWork.Complete();
+                return res;
+            }
 
             foreach (var item in cart.OrderItems)
             {
@@ -161,7 +168,6 @@ namespace Online_Store.Services
 
             return new BuyResult();
         }
-
         public void AddToCart(string username, int productId)
         {
             var cart = _unitOfWork.OrderGroups.GetByUsernameAndStatus(username, "cart");
@@ -235,7 +241,7 @@ namespace Online_Store.Services
 
             _unitOfWork.Complete();
         }
-        public void AddProduct(string name, string description, float price, int quantity)
+        public void AddProduct(string name, string description, double price, int quantity)
         {
             var product = new Product
             {
@@ -251,7 +257,7 @@ namespace Online_Store.Services
             _unitOfWork.Complete();
         }
 
-        public void UpdateProduct(int id, string name, string description, float price, int quantity)
+        public void UpdateProduct(int id, string name, string description, double price, int quantity)
         {
             var product = _unitOfWork.Products.GetById(id);
             product.Description = description;

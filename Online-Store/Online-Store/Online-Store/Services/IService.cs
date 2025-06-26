@@ -18,11 +18,12 @@ namespace Online_Store.Services
         public void AddToCart(string username, int productId);
         public void ChangeNotificationIsRead(int id);
         public User? GetByUsernameAndPassword(string username, string hashedPassword);
+        public User? GetByUsername(string username);
 
         public void AddUser(string username, string hashedPassword, string roleName);
-        public void AddProduct(string name, string description, float price, int quantity);
+        public void AddProduct(string name, string description, double price, int quantity);
 
-        public void UpdateProduct(int id, string name, string description, float price, int quantity);
+        public void UpdateProduct(int id, string name, string description, double price, int quantity);
 
         public void DeleteUser(int id);
         public void DeleteProduct(int id);

@@ -55,7 +55,7 @@ namespace Online_Store.Controllers
                 Price = Math.Round(parsedPrice, 2)
             };
 
-            _service.AddProduct(name, description, (float)Math.Round(parsedPrice, 2), parsedQuantity);
+            _service.AddProduct(name, description, Math.Round(parsedPrice, 2), parsedQuantity);
 
             TempData["SuccessMessage"] = $"{name} has been added!";
             return RedirectToAction("Index");
@@ -76,15 +76,21 @@ namespace Online_Store.Controllers
 
         // Edition's form handler
         [HttpPost]
-        public IActionResult Edit(int id, string name, string description, float price, int quantity)
+        public IActionResult Edit(int id, string name, string description, string price, int quantity)
         {
             if (ModelState.IsValid)
             {
+                if (!double.TryParse(price, NumberStyles.Any, CultureInfo.InvariantCulture, out double parsedPrice))
+                {
+                    TempData["ErrorMessage"] = "Invalid price.";
+                    return RedirectToAction("Index");
+                }
+
                 _service.UpdateProduct(
                     id, 
                     name, 
                     description,
-                    (float) Math.Round(price, 2), 
+                    Math.Round(parsedPrice, 2), 
                     quantity);
 
                 TempData["SuccessMessage"] = "Product updated successfully!";
@@ -98,9 +104,15 @@ namespace Online_Store.Controllers
         [HttpPost]
         public IActionResult Delete(int productId)
         {
-            _service.DeleteProduct(productId);
-
-            TempData["SuccessMessage"] = "Product deleted successfully!";
+            try
+            {
+                _service.DeleteProduct(productId);
+                TempData["SuccessMessage"] = "Product deleted successfully!";
+            }
+            catch (Exception ex) 
+            {
+                TempData["ErrorMessage"] = "You can't delete a product while someone is buying it.";
+            }
             
             return RedirectToAction("Index");
         }
@@ -134,7 +146,7 @@ namespace Online_Store.Controllers
         {
             _service.DeleteOrderGroup(orderGroupId);
 
-            TempData["ErrorMessage"] = "Error deleting order.";
+            TempData["SuccessMessage"] = "Correct deleting order.";
             
             return RedirectToAction("Orders");
         }

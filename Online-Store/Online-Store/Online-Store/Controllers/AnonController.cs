@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Online_Store.Data;
+using Online_Store.Data.Models;
 using Online_Store.Extensions;
 using Online_Store.Models;
 using Online_Store.Services;
@@ -24,8 +25,12 @@ namespace Online_Store.Controllers
         // Display only wanted products
         public IActionResult Search(string query)
         {
-            var result = _products.Where(p => p.Name.Contains(query, System.StringComparison.OrdinalIgnoreCase)
-                                           || p.Description.Contains(query, System.StringComparison.OrdinalIgnoreCase)).ToList();
+            query = query?.ToLower() ?? "";
+
+            var result = _products.Where(
+                p => p.Name.ToLower().Contains(query) ||
+                p.Description.ToLower().Contains(query)).ToList();
+
             return View("Index", result);
         }
 
