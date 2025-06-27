@@ -2,16 +2,7 @@ USE bd_project;
 
 INSERT INTO Roles (role_name) VALUES ('Admin'), ('Customer');
 
-INSERT INTO Passwords (password_hash) VALUES
-('hash1'), ('hash2'), ('hash3'), ('hash4'), ('hash5'), ('hania');
-
-INSERT INTO Users (username, password_id, role_id) VALUES
-('alice', 1, 2),
-('bob', 2, 2),
-('carol', 3, 2),
-('dave', 4, 2),
-('eve', 5, 2),
-('hania', 6, 1);
+-- userów należy dodawać przez stronę, żeby hasła się hashowały
 
 INSERT INTO Products (name, description, price, quantity) VALUES
 ('Laptop', 'Gaming laptop with RTX 4060', 5499.99, 10),

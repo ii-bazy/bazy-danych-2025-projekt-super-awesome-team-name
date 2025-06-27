@@ -1,9 +1,7 @@
 USE bd_project;
 INSERT INTO Roles (role_name) VALUES ('Admin'), ('Customer');
 
--- dane testowe - logowanie zadziała
-INSERT INTO Passwords (password_hash) VALUES
-('hash1'), ('hash2'), ('hash3'), ('hash4'), ('hash5'), ('hania');
+-- userów należy dodawać przez stronę, żeby hasła się hashowały
 
 -- generowane dodatkowo - mock users, hashe są losowe
 INSERT INTO Passwords (password_hash) VALUES
@@ -57,15 +55,6 @@ INSERT INTO Passwords (password_hash) VALUES
 ('1679091c5a880faf6fb5e6087eb1b2dc'),
 ('8fa14cdd754f91cc6554c9e71929cce7'),
 ('c45147dee729311ef5b5c3003946c48f');
-
--- dane testowe - logowanie zadziała
-INSERT INTO Users (username, password_id, role_id) VALUES
-('alice', 1, 2),
-('bob', 2, 2),
-('carol', 3, 2),
-('dave', 4, 2),
-('eve', 5, 2),
-('hania', 6, 1);
 
 -- mock konta z losowymi hashami
 INSERT INTO Users (username, password_id, role_id) VALUES
