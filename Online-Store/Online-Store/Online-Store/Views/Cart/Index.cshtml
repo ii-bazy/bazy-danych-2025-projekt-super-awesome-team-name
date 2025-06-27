@@ -1,0 +1,56 @@
+﻿@model Dictionary<int, ViewCartItem>
+
+@{
+    ViewData["Title"] = "Your Cart";
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Store - Your Cart</title>
+    <link rel="stylesheet" href="~/css/cart.css">
+</head>
+<body>
+    <h1>Your Cart</h1>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (Model != null && Model.Any())
+    {
+        <div id="cart">
+            @foreach (var item in Model)
+            {
+                <div class="cart-item">
+                    <h3>@item.Value.Name</h3>
+                    <p>Price: $@item.Value.Price</p>
+                    <p>Quantity: @item.Value.Quantity</p>
+
+                    <form asp-controller="Cart" asp-action="RemoveFromCart" method="post">
+                        <input type="hidden" name="key" value="@item.Key" />
+                        <input type="hidden" name="name" value="@item.Value.Name" />
+                        <button type="submit" class="button">Remove</button>
+                    </form>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p>Your cart is empty.</p>
+    }
+
+    <form asp-controller="Payment" asp-action="Index" method="get">
+        <button type="submit" class="button">Proceed to Payment</button>
+    </form>
+
+    <button onclick="window.location.href='@Url.Action("Index", "User")'" class="button">Continue Shopping</button>
+</body>
+</html>

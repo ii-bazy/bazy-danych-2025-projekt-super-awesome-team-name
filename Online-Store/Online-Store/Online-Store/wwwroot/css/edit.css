@@ -1,0 +1,90 @@
+body {
+    background-color: #1a1f2d;
+    font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+    text-align: center;
+    color: #e0f7fa;
+    margin-top: 30px;
+}
+
+h1 {
+    font-size: 40px;
+    margin-bottom: 10px;
+    color: #cceeff;
+}
+
+label {
+    font-size: 20px;
+    margin-top: 20px;
+    display: block;
+    width: 48%;
+    text-align: left;
+    color: #e0f7fa;
+}
+
+input {
+    padding: 10px;
+    margin: 10px;
+    font-size: 16px;
+    border: 1px solid #12324a;
+    border-radius: 0;
+    background-color: #0f2b44;
+    color: #e0f7fa;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+button {
+    padding: 10px;
+    margin: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 0;
+    background-color: #43A047;
+    color: white;
+    font-family: inherit;
+    cursor: pointer;
+    width: 48%;
+    box-sizing: border-box;
+}
+
+button:hover {
+    background-color: #1565C0;
+}
+
+.top-buttons {
+    text-align: right;
+    margin-right: 20px;
+}
+
+.add-product-form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+#edit-product-form {
+    max-width: 400px;
+    margin: auto;
+}
+
+#productList,
+#usersList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 1200px;
+    margin: 20px auto;
+}
+
+.product,
+.user {
+    background-color: #e0f7fa;
+    border: 1px solid #12324a;
+    padding: 15px;
+    margin: 10px;
+    width: 300px;
+    color: #0A1F33;
+    border-radius: 0;
+}

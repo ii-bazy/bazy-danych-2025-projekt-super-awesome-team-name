@@ -1,0 +1,86 @@
+body {
+    background-color: #1a1f2d;
+    font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+    text-align: center;
+    color: #e0f7fa;
+    margin-top: 30vh;
+}
+
+h1 {
+    font-size: 40px;
+    margin-bottom: 10px;
+    color: #cceeff;
+}
+
+label {
+    font-size: 20px;
+    margin-top: 20px;
+    display: block;
+    color: #e0f7fa;
+}
+
+input {
+    padding: 10px;
+    margin: 10px;
+    font-size: 16px;
+    border-radius: 0;
+    border: 1px solid #334155;
+    background-color: #0f2b44;
+    color: #e0f7fa;
+    box-sizing: border-box;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 16px;
+    border-radius: 0;
+    background-color: #1565C0;
+    color: white;
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    height: auto;
+    line-height: normal;
+    vertical-align: middle;
+}
+
+button:hover {
+    background-color: #0d47a1;
+}
+
+#results {
+    margin-top: 20px;
+}
+
+.product {
+    background-color: #263238;
+    color: #e0f7fa;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    border: 1px solid #37474f;
+}
+
+p {
+    margin-bottom: 5px;
+}
+
+ul {
+    padding: 0;
+    list-style-type: none;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+li {
+    font-size: 18px;
+    padding: 10px;
+    background-color: #2e3b4e;
+    color: #e0f7fa;
+    border: 1px solid #3f4d63;
+    border-radius: 0;
+}

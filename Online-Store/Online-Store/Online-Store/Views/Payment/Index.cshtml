@@ -1,0 +1,43 @@
+﻿@model Dictionary<int, ViewCartItem>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Store - Payment</title>
+    <link rel="stylesheet" href="~/css/payment.css">
+</head>
+<body>
+    <h1>Payment</h1>
+    <p>Here you would pay for your products, if only it was implemented.</p>
+    <p>But you can place your order without paying below:</p>
+
+    @if (Model != null && Model.Any())
+    {
+        <ul>
+            @foreach (var item in Model)
+            {
+                <li>@item.Value.Quantity × @item.Value.Name - $@(item.Value.Price * item.Value.Quantity)</li>
+            }
+        </ul>
+        <form asp-action="PlaceOrder" method="post">
+            <button type="submit">Place your order</button>
+        </form>
+    }
+    else
+    {
+        <p>Your cart is empty. <a asp-controller="User" asp-action="Index">Go back to the store</a>.</p>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <p class="error">@TempData["ErrorMessage"]</p>
+    }
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <p class="success">@TempData["SuccessMessage"]</p>
+    }
+</body>
+</html>

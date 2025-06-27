@@ -1,0 +1,129 @@
+body {
+    background-color: #1a1f2d;
+    font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+    text-align: center;
+    color: #e0f7fa;
+    margin-top: 10vh;
+}
+
+h1 {
+    font-size: 40px;
+    margin-bottom: 10px;
+    color: #cceeff;
+}
+
+label {
+    font-size: 20px;
+    margin-top: 20px;
+    color: #e0f7fa;
+}
+
+.top-buttons {
+    text-align: right;
+    margin-right: 20px;
+}
+
+input {
+    padding: 10px;
+    margin: 10px;
+    font-size: 16px;
+    border-radius: 0;
+    border: 1px solid #2a3b4f;
+    background-color: #0f2b44;
+    color: #e0f7fa;
+    box-sizing: border-box;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 16px;
+    border-radius: 0;
+    height: auto;
+    line-height: normal;
+    vertical-align: middle;
+    background-color: #1565C0;
+    color: white;
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+}
+
+button:hover {
+    background-color: #0d47a1;
+}
+
+#results {
+    margin-top: 20px;
+}
+
+.orderGroup {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    margin: 2rem;
+    background-color: #232734;
+}
+
+.product,
+.user,
+.order {
+    background-color: #263238;
+    color: #e0f7fa;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    border: 1px solid #37474f;
+}
+
+p {
+    margin-bottom: 5px;
+}
+
+#deleteModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #1e293b;
+    padding: 20px;
+    border-radius: 0;
+    text-align: center;
+    width: 300px;
+    color: #e0f7fa;
+    font-size: 18px;
+    font-weight: bold;
+    border: 1px solid #334155;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.modal-buttons button {
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 0;
+    background-color: #1565C0;
+    color: white;
+    font-family: inherit;
+    cursor: pointer;
+    margin: 0 5px;
+    border: none;
+}
+
+.modal-buttons button:hover {
+    background-color: #0d47a1;
+}
